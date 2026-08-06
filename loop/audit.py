@@ -17,6 +17,7 @@ import json
 import os
 import pathlib
 import re
+import subprocess
 import sys
 import time
 
@@ -25,8 +26,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LOOP = ROOT / "loop"
-API_URL = "https://api.anthropic.com/v1/messages"
-API_VERSION = "2023-06-01"
+
 
 RUBRIC_WEIGHTS = {
     "problem_first": 1.0,
@@ -132,30 +132,52 @@ Schema:
  "summary": str}"""
 
 
+def _extract_opencode_text(raw: str) -> str:
+    """Pull every assistant text block out of `opencode run --format json` output."""
+    parts = []
+    for line in raw.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            ev = json.loads(line)
+        except json.JSONDecodeError:
+            continue  # stray non-JSON log line — skip
+        if ev.get("type") == "text":
+            parts.append(ev.get("part", {}).get("text", ""))
+    return "\n".join(parts).strip()
+
+
 def call_model(model: str, system: str, prompt: str, max_tokens: int = 4000) -> str:
-    key = os.environ.get("ANTHROPIC_API_KEY")
-    if not key:
-        raise RuntimeError("ANTHROPIC_API_KEY is not set")
-    body = {
-        "model": model,
-        "max_tokens": max_tokens,
-        "system": system,
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = requests.post(
-        API_URL,
-        headers={
-            "x-api-key": key,
-            "anthropic-version": API_VERSION,
-            "content-type": "application/json",
-        },
-        json=body,
-        timeout=180,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    # Adaptive thinking is on by default; select text blocks by type, never by index.
-    return "\n".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text").strip()
+    """Drive the loop's model work through the headless opencode CLI.
+
+    Replaces the Anthropic HTTP call with `opencode run` so the harness runs the
+    same coding agent that works on the repo, pointed at a configured model
+    (e.g. a free DeepSeek one) with no API key required.
+    """
+    cmd = [
+        "opencode", "run",
+        "-m", model,
+        "--format", "json",
+        "--pure",                # no external plugins in CI
+        "--auto",                # don't block on permission prompts, headless
+        f"{system}\n\n{prompt}",
+    ]
+    try:
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=600,
+            env={**os.environ,
+                 "OPENCODE_DISABLE_PROJECT_CONFIG": "1",
+                 "CI": "1"},
+        )
+    except FileNotFoundError:
+        raise RuntimeError("opencode CLI is not installed (needs `npm i -g opencode-ai` or the install script)")
+    if proc.returncode != 0:
+        raise RuntimeError(f"opencode run failed ({proc.returncode}): {proc.stderr[-400:]}")
+    return _extract_opencode_text(proc.stdout)
 
 
 def parse_grade(raw: str) -> dict:

@@ -13,8 +13,8 @@ competitors:
   - https://zireh.com.au/
 
 models:
-  grader: claude-sonnet-5      # loop 2 — runs every cycle, high volume
-  improver: claude-opus-5      # loop 4 — runs on trend, low volume
+  grader: opencode/deepseek-v4-flash-free   # loop 2 — runs every cycle, high volume, free
+  improver: opencode/deepseek-v4-flash-free # loop 4 — runs on trend, low volume
 
 thresholds:
   # Below this overall score the workflow opens a P1 issue instead of a routine PR.

@@ -39,6 +39,12 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - name: Install opencode (audit)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm i -g opencode-ai@latest
+
       - run: pip install -r loop/requirements.txt
 
       # The pipeline verifies itself before it is allowed to spend tokens.
@@ -52,8 +58,6 @@ jobs:
 
       - name: Audit
         id: run
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             python loop/audit.py --dry-run
@@ -122,12 +126,16 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - name: Install opencode (improve)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm i -g opencode-ai@latest
+
       - run: pip install -r loop/requirements.txt
 
       - name: Analyze traces and propose harness changes
         id: improve
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             python loop/improve.py --dry-run
