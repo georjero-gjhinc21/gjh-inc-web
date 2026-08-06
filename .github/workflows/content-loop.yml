@@ -44,6 +44,8 @@ jobs:
         with:
           node-version: "20"
       - run: npm i -g opencode-ai@latest
+      - name: Verify opencode works
+        run: opencode run -m opencode/deepseek-v4-flash-free --format json "ok" >/dev/null
 
       - run: pip install -r loop/requirements.txt
 
@@ -177,3 +179,27 @@ jobs:
           from: gjh-content-loop
           body: harness proposal PR opened; review before merge.
           href_body: "harness proposal PR opened; review before merge."
+
+  notify-failure:
+    # If anything fails before its own summary email can run, this job still
+    # emails the human. Notification only — fails soft.
+    needs: [audit, improve]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Email workflow failure
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Content loop FAILED — ${{ github.run_name }} / ${{ github.run_number }}"
+          to: ${{ secrets.SMTP_USERNAME }}
+          from: gjh-content-loop
+          body: |
+            The content loop workflow failed.
+            Repo:    ${{ github.repository }}
+            Run:     ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Reason:  check the run logs above.
