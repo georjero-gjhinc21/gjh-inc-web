@@ -1,0 +1,48 @@
+site: gjh-inc.com
+
+# Loop 1 — what the agent looks at
+targets:
+  - id: home
+    url: https://gjh-inc.com/
+    intent: "Position GJH Inc. as an independent consulting firm helping organizations put AI and their data to practical use, with the working principles that give buyers confidence."
+
+# Benchmarked against, not copied from. Used for relevancy gap analysis only.
+competitors:
+  - https://www.techjays.com/
+  - https://www.v2.ai/
+  - https://zireh.com.au/
+
+models:
+  grader: claude-sonnet-5      # loop 2 — runs every cycle, high volume
+  improver: claude-opus-5      # loop 4 — runs on trend, low volume
+
+thresholds:
+  # Below this overall score the workflow opens a P1 issue instead of a routine PR.
+  fail_below: 3.2
+  # A drop this large vs the previous run is treated as a regression.
+  regression_delta: 0.4
+  # Loop 2 retries when the grader returns unparseable or incomplete output.
+  max_grader_retries: 3
+
+# Deterministic pre-grader — no tokens, objective, trends cleanly.
+static_checks:
+  min_rendered_words: 200        # server-rendered text an AI crawler can actually read
+  require_title: true
+  require_meta_description: true
+  require_schema_org: true       # Organization JSON-LD
+  banned_words:
+    - reimagine
+    - unlock
+    - revolutionize
+    - cutting-edge
+    - seamlessly
+    - empower
+    - game-changing
+    - transformative
+    - harness the power
+  required_signals:              # positioning vocabulary that must survive edits
+    - consulting
+    - ai
+    - data
+    - assessment
+    - own

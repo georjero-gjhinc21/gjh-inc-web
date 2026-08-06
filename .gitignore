@@ -1,0 +1,15 @@
+# Source material / credentials artifacts
+files (23).zip
+**/*.zip:Zone.Identifier
+extracted_files/
+
+# Python
+__pycache__/
+*.pyc
+
+# Content-loop runtime state (regenerated each run)
+history/
+reports/
+
+# Local-only test config (points at localhost)
+loop/config-live.yaml

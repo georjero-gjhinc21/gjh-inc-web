@@ -1,0 +1,134 @@
+name: content-loop
+
+on:
+  schedule:
+    # Loop 3 — weekly audit, Mondays 08:00 America/Chicago
+    - cron: "0 13 * * 1"
+    # Loop 4 — monthly harness review, 1st of the month
+    - cron: "0 14 1 * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run with fixtures and the stub grader (no API spend)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: content-loop
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.run.outputs.status }}
+      mean: ${{ steps.run.outputs.mean_overall }}
+      delta: ${{ steps.run.outputs.delta }}
+      report: ${{ steps.run.outputs.report_path }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r loop/requirements.txt
+
+      # The pipeline verifies itself before it is allowed to spend tokens.
+      - name: Smoke test the loop
+        run: python loop/audit.py --dry-run
+        env:
+          GITHUB_OUTPUT: /dev/null
+
+      - name: Reset smoke-test trace
+        run: git checkout -- history/ 2>/dev/null || true
+
+      - name: Audit
+        id: run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python loop/audit.py --dry-run
+          else
+            python loop/audit.py
+          fi
+
+      - name: Open PR with the audit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="content-loop/audit-$(date -u +%Y-%m-%d-%H%M)"
+          git config user.name  "gjh-content-loop"
+          git config user.email "actions@github.com"
+          git checkout -b "$BRANCH"
+          git add reports/ history/
+          git diff --staged --quiet && { echo "nothing changed"; exit 0; }
+          git commit -m "content loop: audit $(date -u +%Y-%m-%d) (mean ${{ steps.run.outputs.mean_overall }})"
+          git push -u origin "$BRANCH"
+          gh pr create \
+            --title "Content loop — audit $(date -u +%Y-%m-%d) (mean ${{ steps.run.outputs.mean_overall }}, Δ ${{ steps.run.outputs.delta }})" \
+            --body-file "${{ steps.run.outputs.report_path }}" \
+            --label "content-loop" --label "needs-human-review"
+
+      - name: Escalate a failure or regression
+        if: steps.run.outputs.status != 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "Content loop ${{ steps.run.outputs.status }} — mean ${{ steps.run.outputs.mean_overall }} (Δ ${{ steps.run.outputs.delta }})" \
+            --body-file "${{ steps.run.outputs.report_path }}" \
+            --label "content-loop" --label "priority"
+
+  improve:
+    # Loop 4 only runs on the monthly cron or an explicit manual run.
+    needs: audit
+    if: github.event.schedule == '0 14 1 * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r loop/requirements.txt
+
+      - name: Analyze traces and propose harness changes
+        id: improve
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python loop/improve.py --dry-run
+          else
+            python loop/improve.py
+          fi
+
+      # A harness change alters how every future audit is scored, so it gets its
+      # own PR, its own reviewer, and never rides along with a content PR.
+      - name: Open harness proposal PR
+        if: steps.improve.outputs.has_proposal == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="content-loop/harness-$(date -u +%Y-%m)"
+          git config user.name  "gjh-content-loop"
+          git config user.email "actions@github.com"
+          git checkout -b "$BRANCH"
+          git add reports/
+          git diff --staged --quiet && exit 0
+          git commit -m "content loop: harness proposal $(date -u +%Y-%m)"
+          git push -u origin "$BRANCH"
+          gh pr create \
+            --title "Harness proposal $(date -u +%Y-%m) — confidence: ${{ steps.improve.outputs.confidence }}" \
+            --body-file "${{ steps.improve.outputs.proposal_path }}" \
+            --label "content-loop" --label "harness-change" --label "needs-human-review"
