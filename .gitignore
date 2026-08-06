@@ -7,9 +7,5 @@ extracted_files/
 __pycache__/
 *.pyc
 
-# Content-loop runtime state (regenerated each run)
-history/
-reports/
-
 # Local-only test config (points at localhost)
 loop/config-live.yaml

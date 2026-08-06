@@ -2,8 +2,8 @@ name: content-loop
 
 on:
   schedule:
-    # Loop 3 — weekly audit, Mondays 08:00 America/Chicago
-    - cron: "0 13 * * 1"
+    # Loop 3 — daily audit, 07:00 America/Chicago (12:00 UTC)
+    - cron: "0 12 * * *"
     # Loop 4 — monthly harness review, 1st of the month
     - cron: "0 14 1 * *"
   workflow_dispatch:
@@ -25,6 +25,7 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     outputs:
       status: ${{ steps.run.outputs.status }}
       mean: ${{ steps.run.outputs.mean_overall }}
@@ -60,22 +61,19 @@ jobs:
             python loop/audit.py
           fi
 
-      - name: Open PR with the audit
+      # Auto-ship: a clean audit commits its report + trace to main directly,
+      # so the human inbox only gets the summary and any PRs that need action.
+      - name: Auto-ship audit artifacts to main
+        if: steps.run.outputs.status == 'ok'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          BRANCH="content-loop/audit-$(date -u +%Y-%m-%d-%H%M)"
           git config user.name  "gjh-content-loop"
           git config user.email "actions@github.com"
-          git checkout -b "$BRANCH"
           git add reports/ history/
-          git diff --staged --quiet && { echo "nothing changed"; exit 0; }
+          git diff --staged --quiet && { echo "no artifact changes"; exit 0; }
           git commit -m "content loop: audit $(date -u +%Y-%m-%d) (mean ${{ steps.run.outputs.mean_overall }})"
-          git push -u origin "$BRANCH"
-          gh pr create \
-            --title "Content loop — audit $(date -u +%Y-%m-%d) (mean ${{ steps.run.outputs.mean_overall }}, Δ ${{ steps.run.outputs.delta }})" \
-            --body-file "${{ steps.run.outputs.report_path }}" \
-            --label "content-loop" --label "needs-human-review"
+          git push origin main
 
       - name: Escalate a failure or regression
         if: steps.run.outputs.status != 'ok'
@@ -87,11 +85,35 @@ jobs:
             --body-file "${{ steps.run.outputs.report_path }}" \
             --label "content-loop" --label "priority"
 
+      # Notification only — fails soft so a mail outage never fails the run.
+      - name: Email daily summary
+        if: always()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Content loop daily — mean ${{ steps.run.outputs.mean_overall }} (Δ ${{ steps.run.outputs.delta }})"
+          to: georjero@gmail.com
+          from: gjh-content-loop
+          body: |
+            gjh-inc.com content loop — $(date -u +%Y-%m-%d)
+
+            Status: ${{ steps.run.outputs.status }}
+            Mean:   ${{ steps.run.outputs.mean_overall }}  (Δ ${{ steps.run.outputs.delta }})
+
+            Harness proposals arrive as pull requests awaiting your review.
+          html_body: "gjh-inc.com content loop<br/>Status: <b>${{ steps.run.outputs.status }}</b><br/>Mean: <b>${{ steps.run.outputs.mean_overall }}</b>"
+
   improve:
+    # Human-in-the-loop: harness proposals are never auto-merged.
     # Loop 4 only runs on the monthly cron or an explicit manual run.
     needs: audit
     if: github.event.schedule == '0 14 1 * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -132,3 +154,18 @@ jobs:
             --title "Harness proposal $(date -u +%Y-%m) — confidence: ${{ steps.improve.outputs.confidence }}" \
             --body-file "${{ steps.improve.outputs.proposal_path }}" \
             --label "content-loop" --label "harness-change" --label "needs-human-review"
+
+      - name: Email harness proposal notification
+        if: always()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Content loop — harness proposal awaiting your review"
+          to: georjero@gmail.com
+          from: gjh-content-loop
+          body: harness proposal PR opened; review before merge.
+          href_body: "harness proposal PR opened; review before merge."
