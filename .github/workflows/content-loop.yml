@@ -67,8 +67,9 @@ jobs:
             python loop/audit.py
           fi
 
-      # Auto-ship: a clean audit commits its report + trace to main directly,
+# Auto-ship: a clean audit commits its report + trace to main directly,
       # so the human inbox only gets the summary and any PRs that need action.
+      # Capture what changed + the commit hash so the email can show it.
       - name: Auto-ship audit artifacts to main
         if: steps.run.outputs.status == 'ok'
         env:
@@ -79,7 +80,35 @@ jobs:
           git add reports/ history/
           git diff --staged --quiet && { echo "no artifact changes"; exit 0; }
           git commit -m "content loop: audit $(date -u +%Y-%m-%d) (mean ${{ steps.run.outputs.mean_overall }})"
+          SHA=$(git rev-parse --short HEAD)
+          { echo "## Changed this run (auto-shipped to main)"; echo ""; \
+            git show --stat --oneline "$SHA" | tail -n +3 | \
+            sed 's/^/  - /'; echo ""; \
+            echo "Commit: \`$SHA\` (${{ github.server_url }}/${{ github.repository }}/commit/$SHA)"; } \
+            > "$GITHUB_WORKSPACE/tmp-change-summary.md"
+          > "$GITHUB_WORKSPACE/tmp-change-summary.md"
           git push origin main
+
+      # Build the full email body with per-file change details so the daily
+      # mail shows exactly what landed, with a link to each commit.
+      - name: Build email body
+        id: mailbody
+        run: |
+          {
+            echo "gjh-inc.com content loop — $(date -u +%Y-%m-%d)"
+            echo ""
+            echo "Status: ${{ steps.run.outputs.status }}"
+            echo "Mean:   ${{ steps.run.outputs.mean_overall }}  (Δ ${{ steps.run.outputs.delta }})"
+            echo ""
+            if [ -f "$GITHUB_WORKSPACE/tmp-change-summary.md" ]; then
+              cat "$GITHUB_WORKSPACE/tmp-change-summary.md"
+            else
+              echo "No artifacts auto-shipped this run."
+            fi
+            echo ""
+            echo "Harness proposals arrive as pull requests awaiting your review."
+          } > "$GITHUB_WORKSPACE/tmp-mailbody.txt"
+          { echo "body<<EOF"; cat "$GITHUB_WORKSPACE/tmp-mailbody.txt"; echo "EOF"; } >> "$GITHUB_OUTPUT"
 
       - name: Escalate a failure or regression
         if: steps.run.outputs.status != 'ok'
@@ -104,14 +133,7 @@ jobs:
           subject: "Content loop daily — mean ${{ steps.run.outputs.mean_overall }} (Δ ${{ steps.run.outputs.delta }})"
           to: georjero@gmail.com
           from: ${{ secrets.SMTP_USERNAME }}
-          body: |
-            gjh-inc.com content loop — $(date -u +%Y-%m-%d)
-
-            Status: ${{ steps.run.outputs.status }}
-            Mean:   ${{ steps.run.outputs.mean_overall }}  (Δ ${{ steps.run.outputs.delta }})
-
-            Harness proposals arrive as pull requests awaiting your review.
-          html_body: "gjh-inc.com content loop<br/>Status: <b>${{ steps.run.outputs.status }}</b><br/>Mean: <b>${{ steps.run.outputs.mean_overall }}</b>"
+          body: ${{ steps.mailbody.outputs.body }}
 
   improve:
     # Human-in-the-loop: harness proposals are never auto-merged.
