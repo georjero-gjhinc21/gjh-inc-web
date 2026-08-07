@@ -178,7 +178,7 @@ jobs:
           to: georjero@gmail.com
           from: gjh-content-loop
           body: harness proposal PR opened; review before merge.
-          href_body: "harness proposal PR opened; review before merge."
+          html_body: "harness proposal PR opened; review before merge."
 
   notify-failure:
     # If anything fails before its own summary email can run, this job still
