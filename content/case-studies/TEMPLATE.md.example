@@ -1,0 +1,31 @@
+---
+title: "Short, specific outcome — not a slogan"
+summary: "One sentence a stranger could repeat accurately."
+date: "2026-01-15"
+topic: "Data foundations"
+sector: "Financial services"
+client: "Name if approved in writing, otherwise a description"
+results:
+  - metric: "Reporting cycle"
+    value: "9 days → 4 hrs"
+  - metric: "Eval pass rate"
+    value: "92%"
+  - metric: "Time to first system"
+    value: "6 weeks"
+---
+
+## The problem
+
+What was actually happening, in the client's terms. Include the constraint that made it hard.
+
+## What we did
+
+The approach, honestly — including what was tried and abandoned.
+
+## What changed
+
+The measured result, and what could not be measured. Name the limits of the evidence.
+
+## What we would do differently
+
+Include this section. Its absence is what makes case studies unreadable.
