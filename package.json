@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "gjh-inc.com — GJH Inc. website and business development platform",
+  "engines": {
+    "node": "^18.18.0 || ^19.8.0 || >=20.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
