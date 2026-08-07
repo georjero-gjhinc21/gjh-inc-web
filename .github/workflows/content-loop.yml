@@ -86,7 +86,6 @@ jobs:
             sed 's/^/  - /'; echo ""; \
             echo "Commit: \`$SHA\` (${{ github.server_url }}/${{ github.repository }}/commit/$SHA)"; } \
             > "$GITHUB_WORKSPACE/tmp-change-summary.md"
-          > "$GITHUB_WORKSPACE/tmp-change-summary.md"
           git push origin main
 
       # Build the full email body with per-file change details so the daily
