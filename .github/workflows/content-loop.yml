@@ -103,7 +103,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "Content loop daily — mean ${{ steps.run.outputs.mean_overall }} (Δ ${{ steps.run.outputs.delta }})"
           to: georjero@gmail.com
-          from: gjh-content-loop
+          from: ${{ secrets.SMTP_USERNAME }}
           body: |
             gjh-inc.com content loop — $(date -u +%Y-%m-%d)
 
@@ -176,7 +176,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "Content loop — harness proposal awaiting your review"
           to: georjero@gmail.com
-          from: gjh-content-loop
+          from: ${{ secrets.SMTP_USERNAME }}
           body: harness proposal PR opened; review before merge.
           html_body: "harness proposal PR opened; review before merge."
 
@@ -197,7 +197,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "Content loop FAILED — ${{ github.run_name }} / ${{ github.run_number }}"
           to: ${{ secrets.SMTP_USERNAME }}
-          from: gjh-content-loop
+          from: ${{ secrets.SMTP_USERNAME }}
           body: |
             The content loop workflow failed.
             Repo:    ${{ github.repository }}
