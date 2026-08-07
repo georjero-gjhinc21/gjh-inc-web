@@ -71,6 +71,7 @@ jobs:
       # so the human inbox only gets the summary and any PRs that need action.
       # Capture what changed + the commit hash so the email can show it.
       - name: Auto-ship audit artifacts to main
+        id: autoship
         if: steps.run.outputs.status == 'ok'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -78,8 +79,13 @@ jobs:
           git config user.name  "gjh-content-loop"
           git config user.email "actions@github.com"
           git add reports/ history/
-          git diff --staged --quiet && { echo "no artifact changes"; exit 0; }
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "no artifact changes"
+            exit 0
+          fi
           git commit -m "content loop: audit $(date -u +%Y-%m-%d) (mean ${{ steps.run.outputs.mean_overall }})"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
           SHA=$(git rev-parse --short HEAD)
           { echo "## Changed this run (auto-shipped to main)"; echo ""; \
             git show --stat --oneline "$SHA" | tail -n +3 | \
@@ -120,8 +126,9 @@ jobs:
             --label "content-loop" --label "priority"
 
       # Notification only — fails soft so a mail outage never fails the run.
+      # Only emailed when the audit auto-shipped a real change.
       - name: Email daily summary
-        if: always()
+        if: steps.autoship.outputs.changed == 'true'
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
@@ -187,7 +194,7 @@ jobs:
             --label "content-loop" --label "harness-change" --label "needs-human-review"
 
       - name: Email harness proposal notification
-        if: always()
+        if: steps.improve.outputs.has_proposal == 'true'
         continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
