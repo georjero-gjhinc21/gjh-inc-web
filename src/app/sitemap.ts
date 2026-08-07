@@ -3,6 +3,8 @@ import { practices } from "@/lib/practices";
 import { getCollection } from "@/lib/content";
 import { site } from "@/lib/site";
 
+export const dynamic = "force-static";
+
 /**
  * Generated from the same data that renders the pages, so it cannot drift.
  * This replaces the hand-maintained sitemap.xml on the old static site.
