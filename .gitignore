@@ -1,11 +1,11 @@
-# Source material / credentials artifacts
-files (23).zip
-**/*.zip:Zone.Identifier
-extracted_files/
-
-# Python
-__pycache__/
-*.pyc
-
-# Local-only test config (points at localhost)
-loop/config-live.yaml
+node_modules/
+.next/
+out/
+build/
+.env
+.env.local
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+tsconfig.tsbuildinfo
