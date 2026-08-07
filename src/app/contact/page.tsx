@@ -44,17 +44,6 @@ export default function ContactPage() {
               <li>3. If we are, a scoped assessment with a fixed price before any commitment.</li>
             </ol>
           </div>
-
-          <div className="card mt-5">
-            <h2 className="eyebrow">Federal opportunities</h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              Government contracting enquiries are handled by{" "}
-              <a href={site.sister.url} rel="noopener" className="text-indigo underline underline-offset-2">
-                {site.sister.name}
-              </a>
-              .
-            </p>
-          </div>
         </aside>
       </div>
     </>

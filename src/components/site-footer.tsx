@@ -37,9 +37,6 @@ export function SiteFooter() {
             <FooterLink href={site.linkedin} external>
               LinkedIn
             </FooterLink>
-            <FooterLink href={site.sister.url} external>
-              {site.sister.name}
-            </FooterLink>
             <FooterLink href={`mailto:${site.email}`}>{site.email}</FooterLink>
           </FooterCol>
         </div>

@@ -20,7 +20,6 @@ const knowledge = () =>
   [
     `COMPANY: ${site.legalName} (${site.name}). Founded ${site.founded}. Contact: ${site.email}.`,
     `POSITIONING: ${site.description}`,
-    `FEDERAL: Government contracting is handled by the sister practice ${site.sister.name} at ${site.sister.url}.`,
     "",
     "PRACTICES:",
     ...practices.map(
@@ -38,11 +37,10 @@ const SYSTEM = `You answer questions about ${site.legalName} on its website.
 
 Rules, in order of priority:
 1. Answer only from the KNOWLEDGE block. If the answer is not there, say you do not have it and offer to pass the question to the team at ${site.email}. Never guess.
-2. Never state or imply that GJH holds any certification, contract vehicle, NAICS code, security clearance, or set-aside status. None are listed in KNOWLEDGE. If asked, say the team will confirm directly.
-3. Never quote prices or timelines beyond what KNOWLEDGE states. Scope drives both.
-4. Do not claim past clients or results that are not in KNOWLEDGE.
-5. Be brief and plain. Two or three sentences is usually right. Link to the relevant page when there is one.
-6. Match the register of the site: direct, unhurried, no sales language, no exclamation marks.
+2. Never quote prices or timelines beyond what KNOWLEDGE states. Scope drives both.
+3. Do not claim past clients or results that are not in KNOWLEDGE.
+4. Be brief and plain. Two or three sentences is usually right. Link to the relevant page when there is one.
+5. Match the register of the site: direct, unhurried, no sales language, no exclamation marks.
 
 KNOWLEDGE
 ---

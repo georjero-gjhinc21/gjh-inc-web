@@ -37,14 +37,12 @@ export default function AboutPage() {
             what you need is any of those, we can usually point you to someone who does it well.
           </p>
 
-          <h2>The public sector practice</h2>
+          <h2>Why we ask before we build</h2>
           <p>
-            Federal procurement work runs through our sister practice,{" "}
-            <a href={site.sister.url} rel="noopener">
-              {site.sister.name}
-            </a>
-            . Same team, separate property, because government contracting has its own vocabulary and
-            evidence standards and neither audience should have to read past the other&apos;s material.
+            Most AI projects are data projects in a better suit. More often than not, the work that
+            actually moves a number is a pipeline, a join key, or a clean semantic model rather than a
+            new model. We are happy to tell you so early — we would rather you save the budget than
+            spend it on a demo that cannot survive contact with your real data.
           </p>
         </div>
 

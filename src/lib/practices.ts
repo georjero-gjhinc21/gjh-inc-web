@@ -1,7 +1,6 @@
 /**
  * Practice areas. These expand the four areas already published on
- * gjh-inc.com rather than inventing a new taxonomy, plus one public-sector
- * area that routes to the sister property.
+ * gjh-inc.com rather than inventing a new taxonomy.
  *
  * `trace` is the engagement shape rendered by <Trace/> — it is the honest
  * sequence of a real engagement, not marketing steps. Keep it accurate.
@@ -151,33 +150,6 @@ export const practices: Practice[] = [
       { t: "ongoing", actor: "client.team", detail: "full access · can take over at any time", status: "run" },
     ],
   },
-  {
-    slug: "public-sector",
-    name: "Public sector",
-    short: "Federal procurement, delivered through GJH Consulting.",
-    lede:
-      "Government contracting, GSA schedules, and federal compliance run through our sister practice at gjhconsulting.net.",
-    body: [
-      "Public sector work has its own vocabulary, its own review cycles, and its own evidence standards. We keep that practice on a separate property so neither audience has to read past the other's material.",
-      "The engineering is the same team. If a federal engagement needs data architecture or an AI system built, the practice areas on this site are what deliver it.",
-    ],
-    delivers: [
-      "Federal procurement strategy and capture support",
-      "GSA schedule guidance",
-      "Compliance and security documentation support",
-      "Technical delivery drawn from the practices on this site",
-    ],
-    signals: [
-      "You are pursuing a federal opportunity with a technical scope",
-      "An agency programme needs data or AI delivery under existing contract",
-    ],
-    stack: ["See gjhconsulting.net"],
-    trace: [
-      { t: "step 01", actor: "gjh.consulting", detail: "opportunity and capture strategy", status: "ok" },
-      { t: "step 02", actor: "gjh.inc", detail: "technical approach and architecture", status: "ok" },
-      { t: "step 03", actor: "joint", detail: "delivery under the awarded scope", status: "run" },
-    ],
-  },
-];
+  ];
 
 export const getPractice = (slug: string) => practices.find((p) => p.slug === slug);

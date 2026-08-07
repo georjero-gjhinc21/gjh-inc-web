@@ -3,26 +3,18 @@
  *
  * RULE: every claim in this file must be verifiable. Anything GJH has not
  * confirmed in writing belongs in content/TODO-CLIENT-INPUT.md, not here.
- * Unverified certification claims are a real compliance exposure in federal
- * marketing — do not add 8(a), HUBZone, SDVOSB, or contract vehicle numbers
- * until GJH supplies current award letters.
  */
 
 export const site = {
   name: "GJH Inc.",
   legalName: "GJH INC",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://gjh-inc.com",
-  email: "info@gjh-inc.com", // canonical everywhere — never gjhconsulting.net
+  email: "info@gjh-inc.com", // canonical everywhere
   linkedin: "https://www.linkedin.com/company/gjhinc",
   founded: "2009",
   tagline: "Consulting for organizations putting AI to work.",
   description:
     "GJH Inc. helps teams find where AI genuinely helps, build the systems that deliver it, and keep the data underneath in good order. Consulting since 2009.",
-  sister: {
-    name: "GJH Consulting",
-    url: "https://gjhconsulting.net",
-    role: "Federal procurement and government contracting practice",
-  },
 } as const;
 
 export const nav = [

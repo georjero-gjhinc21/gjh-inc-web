@@ -8,10 +8,8 @@ const __dirname = dirname(__filename);
 const compat = new FlatCompat({ baseDirectory: __dirname });
 
 const eslintConfig = [
+  { ignores: ["postcss.config.mjs", ".next/**", "node_modules/**", "next-env.d.ts", "*.tsbuildinfo"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  {
-    ignores: ["postcss.config.mjs"],
-  },
 ];
 
 export default eslintConfig;

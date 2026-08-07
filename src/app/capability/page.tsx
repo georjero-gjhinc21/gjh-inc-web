@@ -70,7 +70,6 @@ export default function CapabilityPage() {
             {[
               { k: "Email", v: site.email },
               { k: "Web", v: "gjh-inc.com" },
-              { k: "Federal practice", v: "gjhconsulting.net" },
               { k: "Founded", v: site.founded },
             ].map((r) => (
               <div key={r.k} className="flex justify-between gap-4 py-3 text-sm">
@@ -80,17 +79,6 @@ export default function CapabilityPage() {
             ))}
           </dl>
         </section>
-      </div>
-
-      <div className="frame pb-16">
-        <div className="card max-w-measure border-indigo/30 bg-indigo-wash">
-          <p className="eyebrow !text-indigo-deep">Pending verification</p>
-          <p className="mt-3 text-sm leading-relaxed">
-            NAICS codes, UEI/CAGE, socioeconomic certifications, and contract vehicles are deliberately
-            absent until GJH supplies current documentation. Publishing unverified set-aside status is a
-            compliance exposure, not a marketing shortcut.
-          </p>
-        </div>
       </div>
 
       <CalloutCTA
