@@ -10,6 +10,9 @@
  * Env vars (set in the Cloudflare Pages dashboard):
  *   RESEND_API_KEY   — required. Sending domain must be verified in Resend.
  *   CONTACT_TO_EMAIL — defaults to info@gjh-inc.com.
+ *
+ * Canary: POST a body whose message starts with "@ping" to return config state
+ * without sending — for diagnosing delivery issues from a shell here.
  */
 
 const toEmail = (env: Env) => env.CONTACT_TO_EMAIL ?? "info@gjh-inc.com";
@@ -66,6 +69,16 @@ export const onRequestPost = async ({ request, env }: EventContext) => {
     if (!key) {
       console.warn("[contact] RESEND_API_KEY unset — cannot deliver", { name, email, to });
       return json({ error: "delivery is not configured" }, 502);
+    }
+
+    // Canary for diagnosing delivery: response with config state only, no send.
+    if (message.trim().toLowerCase().startsWith("@ping")) {
+      return json({
+        debug: true,
+        keySet: Boolean(key),
+        to,
+        envKeys: Object.keys(env),
+      });
     }
 
     try {
