@@ -68,23 +68,28 @@ export const onRequestPost = async ({ request, env }: EventContext) => {
       return json({ error: "delivery is not configured" }, 502);
     }
 
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: "gjh-inc.com <no-reply@gjh-inc.com>",
-        to: [to],
-        reply_to: email,
-        subject: `Enquiry — ${name}${body.organization ? ` (${body.organization})` : ""}`,
-        text: `${name} <${email}>\nOrganization: ${body.organization || "—"}\n\n${message}`,
-      }),
-    });
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: "gjh-inc.com <no-reply@gjh-inc.com>",
+          to: [to],
+          reply_to: email,
+          subject: `Enquiry — ${name}${body.organization ? ` (${body.organization})` : ""}`,
+          text: `${name} <${email}>\nOrganization: ${body.organization || "—"}\n\n${message}`,
+        }),
+      });
 
-    if (!res.ok) {
-      const detail = await res.text();
-      console.error("[contact] delivery failed", res.status, detail);
-      return json({ error: "delivery failed" }, 502);
+      if (!res.ok) {
+        const detail = await res.text();
+        console.error("[contact] delivery failed", res.status, detail);
+        return json({ error: "delivery failed", detail, upstream: res.status }, 502);
+      }
+
+      return json({ ok: true, delivered: true });
+    } catch (err) {
+      console.error("[contact] delivery threw", String(err));
+      return json({ error: "delivery threw", detail: String(err) }, 502);
     }
-
-    return json({ ok: true, delivered: true });
   };
