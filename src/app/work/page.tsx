@@ -6,7 +6,7 @@ import { practices } from "@/lib/practices";
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Advisory, building, data foundations, and ongoing support — the four practices GJH Inc. delivers, plus public sector work through GJH Consulting.",
+    "Advisory, building, data foundations, and ongoing support — the four practices GJH Inc. delivers.",
   alternates: { canonical: "/work" },
 };
 
@@ -17,7 +17,7 @@ export default function WorkPage() {
         <p className="eyebrow">Work</p>
         <h1 className="h1 mt-5 max-w-[18ch]">We would rather rule things out than sell you all of them.</h1>
         <p className="lede mt-7">
-          Five practice areas. Most clients need one or two, and the honest answer is often that the
+          Four practice areas. Most clients need one or two, and the honest answer is often that the
           third is not worth doing yet.
         </p>
       </section>

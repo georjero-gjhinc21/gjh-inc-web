@@ -3,6 +3,7 @@ import { Trace } from "@/components/trace";
 import { CalloutCTA, PartnerWall, SectionHead } from "@/components/ui";
 import { practices } from "@/lib/practices";
 import { partners } from "@/lib/partners";
+import { sectors } from "@/lib/sectors";
 import { getCollection, formatDate } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -139,6 +140,28 @@ export default async function HomePage() {
           </ul>
         </section>
       )}
+
+      {/* Sectors */}
+      <section className="band frame border-t border-rule">
+        <SectionHead
+          eyebrow="Sectors"
+          title="Two areas where the constraints do the talking"
+          lede="The work looks different in a bank than it does at a utility. Each has constraints that change what we build."
+          action={{ href: "/sectors", label: "All sectors" }}
+        />
+        <ul className="grid gap-5 md:grid-cols-2">
+          {sectors.map((s) => (
+            <li key={s.slug}>
+              <Link href={`/sectors/${s.slug}`} className="card-link flex h-full flex-col">
+                <span className="font-mono text-label uppercase text-muted">{s.name}</span>
+                <h3 className="h3 mt-3">{s.short}</h3>
+                <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">{s.lede}</p>
+                <span className="mt-6 text-sm text-indigo">Read more →</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {/* Partners */}
       <section className="band frame border-t border-rule">
