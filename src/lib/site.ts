@@ -5,6 +5,8 @@
  * confirmed in writing belongs in content/TODO-CLIENT-INPUT.md, not here.
  */
 
+import { sectorKeywords } from "./sectors";
+
 export const site = {
   name: "GJH Inc.",
   legalName: "GJH INC",
@@ -52,6 +54,7 @@ export function organizationJsonLd() {
       "Retrieval augmented generation",
       "Workflow automation",
       "Analytics engineering",
+      ...sectorKeywords,
     ],
     areaServed: "US",
   };

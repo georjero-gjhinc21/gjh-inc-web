@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { practices } from "@/lib/practices";
+import { sectors } from "@/lib/sectors";
 import { getCollection } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -15,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const statics: MetadataRoute.Sitemap = [
     { url: u("/"), priority: 1, changeFrequency: "monthly" },
     { url: u("/work"), priority: 0.9, changeFrequency: "monthly" },
+    { url: u("/sectors"), priority: 0.7, changeFrequency: "monthly" },
     { url: u("/case-studies"), priority: 0.8, changeFrequency: "monthly" },
     { url: u("/insights"), priority: 0.8, changeFrequency: "weekly" },
     { url: u("/partners"), priority: 0.6, changeFrequency: "yearly" },
@@ -28,6 +30,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const practicePages = practices.map((p) => ({
     url: u(`/work/${p.slug}`),
     priority: 0.8,
+    changeFrequency: "monthly" as const,
+  }));
+
+  const sectorPages = sectors.map((s) => ({
+    url: u(`/sectors/${s.slug}`),
+    priority: 0.7,
     changeFrequency: "monthly" as const,
   }));
 
@@ -45,5 +53,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "yearly" as const,
   }));
 
-  return [...statics, ...practicePages, ...studies, ...insights];
+  return [...statics, ...practicePages, ...sectorPages, ...studies, ...insights];
 }

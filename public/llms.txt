@@ -1,0 +1,21 @@
+# GJH Inc. — AI and data consulting
+> A consulting firm helping organizations put AI and their data to practical use. Founded 2009. Anthropic partner.
+
+GJH Inc. helps teams figure out where AI genuinely helps, build the systems that deliver it, and keep the data underneath in good order.
+
+Work:
+- Advisory — where AI is worth the effort in your organization, and where it isn't
+- Building — assistants, automations, and internal tools that run against your real systems
+- Data foundations — warehouses, pipelines, and models
+- Staying with it — monitoring, tuning, and support after launch
+
+How we work:
+- We start small and paid — a short assessment of one workflow — so you can judge the work before committing to more. Most engagements begin under a month.
+- Senior people do the work. You will not be handed to a team you have not met.
+- You own everything we build: the code, the infrastructure, the documentation. No dependency on us by design.
+
+Sectors:
+- Financial services — banking, payments, and reporting that has to survive an examination
+- Energy and utilities — metering, forecasting, and figures a public board will read
+
+Contact: [info@gjh-inc.com](mailto:info@gjh-inc.com) · [LinkedIn](https://www.linkedin.com/company/gjhinc)
