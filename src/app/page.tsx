@@ -141,13 +141,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Sectors */}
+      {/* Industries */}
       <section className="band frame border-t border-rule">
         <SectionHead
-          eyebrow="Sectors"
-          title="Two areas where the constraints do the talking"
-          lede="The work looks different in a bank than it does at a utility. Each has constraints that change what we build."
-          action={{ href: "/sectors", label: "All sectors" }}
+          eyebrow="Industries"
+          title="Where the constraints do the talking"
+          lede="Across financial services, manufacturing, healthcare, and more — the constraints change what we build."
+          action={{ href: "/sectors", label: "All industries" }}
         />
         <ul className="grid gap-5 md:grid-cols-2">
           {sectors.map((s) => (

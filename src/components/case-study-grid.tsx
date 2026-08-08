@@ -26,7 +26,7 @@ export function CaseStudyGrid({ studies }: { studies: Study[] }) {
     <div>
       {sectors.length >= 2 && (
         <div className="mb-8">
-          <p className="font-mono text-label uppercase text-muted">Sector</p>
+          <p className="font-mono text-label uppercase text-muted">Industry</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"

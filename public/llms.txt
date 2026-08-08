@@ -17,5 +17,16 @@ How we work:
 Sectors:
 - Financial services — banking, payments, and reporting that has to survive an examination
 - Energy and utilities — metering, forecasting, and figures a public board will read
+- Manufacturing — quoting, production scheduling, and shop-floor data that has to survive the shift
+- Healthcare — administrative and clinical-adjacent systems where privacy is base load
+- Field services — dispatch, appointments, and arrival windows that survive the day
+- Construction and engineering — estimates, schedules, and the current revision of the drawing
+- Automotive — dealer data, warranty, and the cost of a part arriving late
+- Retail — store-level forecasting and inventory across multi-unit operations
+- Ecommerce — event, catalog, and attribution data that joins cleanly
+- Real estate and rental — property identity, occupancy, and the rent roll across listing and lease systems
+- Education — enrollment, retention, and a student that several systems describe differently
+- Travel — reservations, demand, and booking data fragmented by channel
+- Transportation — fleet, freight, and the network that moves, where the empty mile is the enemy
 
 Contact: [info@gjh-inc.com](mailto:info@gjh-inc.com) · [LinkedIn](https://www.linkedin.com/company/gjhinc)

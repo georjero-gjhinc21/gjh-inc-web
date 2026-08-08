@@ -8,7 +8,7 @@ import { site } from "@/lib/site";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return practices.map((p) => ({ slug: p.slug }));
 }
 
