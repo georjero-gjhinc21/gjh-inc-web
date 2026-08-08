@@ -19,8 +19,14 @@ export function SiteHeader() {
       </a>
 
       <div className="frame flex h-16 items-center justify-between gap-6">
-        <Link href="/" className="font-display text-xl tracking-tight" onClick={() => setOpen(false)}>
-          {site.name}
+        <Link
+          href="/"
+          className="flex items-center gap-2.5"
+          onClick={() => setOpen(false)}
+          aria-label={site.name}
+        >
+          <img src="/gjh-icon.png" alt="" width={30} height={30} className="h-8 w-8" />
+          <span className="font-display text-xl tracking-tight">{site.name}</span>
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-7 md:flex">

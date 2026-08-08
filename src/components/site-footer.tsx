@@ -8,7 +8,10 @@ export function SiteFooter() {
       <div className="frame py-16">
         <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
-            <p className="font-display text-2xl">{site.name}</p>
+            <Link href="/" className="flex items-center gap-2.5" aria-label={site.name}>
+              <img src="/gjh-logo-full.png" alt="" width={28} height={28} className="h-8 w-8" />
+              <p className="font-display text-2xl">{site.name}</p>
+            </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-muted">{site.tagline}</p>
             <p className="mt-4 font-mono text-label uppercase text-ink-muted">
               Consulting since {site.founded}
