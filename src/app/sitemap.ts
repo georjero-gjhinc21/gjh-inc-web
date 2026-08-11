@@ -17,7 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: u("/"), priority: 1, changeFrequency: "monthly" },
     { url: u("/work"), priority: 0.9, changeFrequency: "monthly" },
     { url: u("/sectors"), priority: 0.7, changeFrequency: "monthly" },
-    { url: u("/case-studies"), priority: 0.8, changeFrequency: "monthly" },
     { url: u("/insights"), priority: 0.8, changeFrequency: "weekly" },
     { url: u("/partners"), priority: 0.6, changeFrequency: "yearly" },
     { url: u("/about"), priority: 0.7, changeFrequency: "yearly" },
@@ -46,12 +45,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "yearly" as const,
   }));
 
-  const studies = (await getCollection("case-studies")).map((d) => ({
-    url: u(`/case-studies/${d.slug}`),
-    lastModified: new Date(d.date),
-    priority: 0.7,
-    changeFrequency: "yearly" as const,
-  }));
-
-  return [...statics, ...practicePages, ...sectorPages, ...studies, ...insights];
+  return [...statics, ...practicePages, ...sectorPages, ...insights];
 }

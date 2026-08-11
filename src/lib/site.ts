@@ -11,7 +11,7 @@ export const site = {
   name: "GJH Inc.",
   legalName: "GJH INC",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://gjh-inc.com",
-  email: "info@gjh-inc.com", // canonical everywhere
+  email: "consult@gjh-inc.com", // canonical everywhere
   linkedin: "https://www.linkedin.com/company/gjhinc",
   founded: "2009",
   tagline: "Consulting for organizations putting AI to work.",
@@ -22,7 +22,6 @@ export const site = {
 export const nav = [
   { href: "/work", label: "Work" },
   { href: "/sectors", label: "Industries" },
-  { href: "/case-studies", label: "Case studies" },
   { href: "/insights", label: "Insights" },
   { href: "/partners", label: "Partners" },
   { href: "/about", label: "About" },

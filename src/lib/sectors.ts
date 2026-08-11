@@ -7,9 +7,9 @@
  * history, described at the level of the work rather than through references.
  *
  * SHIP RULE: a sector renders on the site only when `evidence` contains at
- * least one entry with status "published" — i.e. a named case study or a named
- * practitioner. A sector with nothing under it is a claim, and
- * `loop/rubric.md` will mark it down on proof_density and falsifiability.
+ * least one entry with status "published" — i.e. a named, approved reference.
+ * A sector with nothing under it is a claim, and `loop/rubric.md` will mark it
+ * down on proof_density and falsifiability.
  *
  * NAMES: client names do not ship without written approval — see
  * `content/TODO-CLIENT-INPUT.md`. The sector descriptions here are written to
@@ -17,7 +17,7 @@
  */
 
 export type EvidenceStatus =
-  /** Live on the site — a named case study or a named person */
+  /** Live on the site — a named, approved reference */
   | "published"
   /** True and delivered, but needs client sign-off before it can be named */
   | "needs-approval";
@@ -25,8 +25,6 @@ export type EvidenceStatus =
 export type SectorEvidence = {
   what: string;
   status: EvidenceStatus;
-  /** Slug of the named case study that carries this, once one exists */
-  caseStudy?: string;
 };
 
 export type Sector = {

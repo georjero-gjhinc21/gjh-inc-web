@@ -5,14 +5,14 @@
  * handler at src/app/api/contact/route.ts never runs on Cloudflare Pages —
  * API routes are omitted from the export. This function takes over the same
  * contract on the Pages runtime: validate, reject bots, then deliver to
- * info@gjh-inc.com via Resend.
+ * consult@gjh-inc.com via Resend.
  *
  * Env vars (set in the Cloudflare Pages dashboard):
  *   RESEND_API_KEY   — required. Sending domain must be verified in Resend.
- *   CONTACT_TO_EMAIL — defaults to info@gjh-inc.com.
+ *   CONTACT_TO_EMAIL — defaults to consult@gjh-inc.com.
  */
 
-const toEmail = (env: Env) => env.CONTACT_TO_EMAIL ?? "info@gjh-inc.com";
+const toEmail = (env: Env) => env.CONTACT_TO_EMAIL ?? "consult@gjh-inc.com";
 
 type Env = {
   RESEND_API_KEY?: string;

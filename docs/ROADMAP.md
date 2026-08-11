@@ -5,12 +5,12 @@ that has not shipped.
 
 ## Wave 1 — Site (this repo, done)
 
-Twelve routes, statically generated, 106 kB first load. Design system, content
+Eleven routes, statically generated, 106 kB first load. Design system, content
 pipeline, SEO, contact intake, legal pages with the correct address.
 
 **Blocked on GJH for launch:** the items in `content/TODO-CLIENT-INPUT.md`.
-Two of them are hard blockers — case study approval and a decision on the
-positioning question below. The rest can follow.
+One is a hard blocker — a decision on the positioning question below. The rest
+can follow.
 
 ## Wave 2 — Instrumented
 

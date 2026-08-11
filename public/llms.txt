@@ -29,4 +29,4 @@ Sectors:
 - Travel — reservations, demand, and booking data fragmented by channel
 - Transportation — fleet, freight, and the network that moves, where the empty mile is the enemy
 
-Contact: [info@gjh-inc.com](mailto:info@gjh-inc.com) · [LinkedIn](https://www.linkedin.com/company/gjhinc)
+Contact: [consult@gjh-inc.com](mailto:consult@gjh-inc.com) · [LinkedIn](https://www.linkedin.com/company/gjhinc)

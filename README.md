@@ -18,9 +18,8 @@ npm run typecheck
 | `src/lib/site.ts` | Company facts, nav, JSON-LD. **Single source of truth.** |
 | `src/lib/practices.ts` | Practice areas and their engagement traces |
 | `src/lib/partners.ts` | Partnerships. Verified entries only |
-| `src/lib/content.ts` | Markdown loader for insights and case studies |
+| `src/lib/content.ts` | Markdown loader for insights |
 | `content/insights/*.md` | Articles |
-| `content/case-studies/*.md` | Case studies (client-approved only) |
 | `src/components/trace.tsx` | The signature element — see `docs/DESIGN.md` |
 | `src/app/api/contact` | Contact intake |
 | `src/app/api/chat` | Grounded site assistant (needs `ANTHROPIC_API_KEY`) |
@@ -44,8 +43,8 @@ generated. Nothing else to update.
 
 ## Rules that are not negotiable
 
-1. **`info@gjh-inc.com` everywhere.** Never `info@gjhconsulting.net`. The old
-   site had this wrong on `/terms`.
+1. **`consult@gjh-inc.com` everywhere.** Never `info@gjhconsulting.net` and never a
+   second `gjh-inc.com` address. The old site had this wrong on `/terms`.
 2. **No unverified claims.** Certifications, NAICS codes, contract vehicles,
    client names, and metrics go in `content/TODO-CLIENT-INPUT.md` until GJH
    supplies documentation. This applies to the assistant too — see the system

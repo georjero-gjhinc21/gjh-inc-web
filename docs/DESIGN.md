@@ -89,8 +89,8 @@ It is honest structure, not decoration: every row carries a real sequence
 position, a real owner, and a real output. When the content stops being true
 the component should be changed, not the content bent to fit it.
 
-It recurs on purpose — engagement shape on practice pages, delivery history on
-case studies, the first two weeks on the homepage. One idea, used three times,
+It recurs on purpose — engagement shape on practice pages, the first two weeks
+on the homepage. One idea, used twice,
 is what makes a site memorable. Three ideas used once each is what makes it
 noise.
 

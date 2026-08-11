@@ -17,7 +17,6 @@ import { site } from "@/lib/site";
  */
 export default async function HomePage() {
   const insights = (await getCollection("insights")).slice(0, 3);
-  const studies = (await getCollection("case-studies")).slice(0, 2);
 
   return (
     <>
@@ -107,39 +106,6 @@ export default async function HomePage() {
           </dl>
         </div>
       </section>
-
-      {/* Case studies */}
-      {studies.length > 0 && (
-        <section className="band frame">
-          <SectionHead
-            eyebrow="Selected work"
-            title="What the work looks like"
-            lede="Problem, approach, and what actually changed — with the numbers we could measure."
-            action={{ href: "/case-studies", label: "All case studies" }}
-          />
-          <ul className="grid gap-5 md:grid-cols-2">
-            {studies.map((s) => (
-              <li key={s.slug}>
-                <Link href={`/case-studies/${s.slug}`} className="card-link flex h-full flex-col">
-                  <span className="font-mono text-label uppercase text-muted">{s.sector ?? s.topic}</span>
-                  <h3 className="h3 mt-3">{s.title}</h3>
-                  <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">{s.summary}</p>
-                  {s.results && (
-                    <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 border-t border-rule pt-5">
-                      {s.results.slice(0, 3).map((r) => (
-                        <div key={r.metric}>
-                          <dt className="font-mono text-label uppercase text-muted">{r.metric}</dt>
-                          <dd className="mt-1 font-display text-2xl">{r.value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
 
       {/* Industries */}
       <section className="band frame border-t border-rule">

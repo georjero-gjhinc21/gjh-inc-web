@@ -23,10 +23,6 @@ export type Doc = {
   topic: string;
   author?: string;
   readingTime: number;
-  /** Case-study fields */
-  client?: string;
-  sector?: string;
-  results?: { metric: string; value: string }[];
   body: string; // rendered HTML
 };
 
@@ -50,20 +46,17 @@ async function toDoc(slug: string, raw: string): Promise<Doc> {
     date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
     topic: data.topic ?? "General",
     author: data.author,
-    client: data.client,
-    sector: data.sector,
-    results: data.results,
     readingTime: Math.max(1, Math.round(words / 220)),
     body: processed.toString(),
   };
 }
 
-export async function getCollection(dir: "insights" | "case-studies"): Promise<Doc[]> {
+export async function getCollection(dir: "insights"): Promise<Doc[]> {
   const docs = await Promise.all(readCollection(dir).map(({ slug, raw }) => toDoc(slug, raw)));
   return docs.sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
 
-export async function getDoc(dir: "insights" | "case-studies", slug: string): Promise<Doc | null> {
+export async function getDoc(dir: "insights", slug: string): Promise<Doc | null> {
   const file = path.join(ROOT, dir, `${slug}.md`);
   if (!fs.existsSync(file)) return null;
   return toDoc(slug, fs.readFileSync(file, "utf8"));

@@ -10,7 +10,7 @@ import type { TraceStep } from "@/lib/practices";
  * owner, and output — so it is not decoration.
  *
  * It recurs deliberately: engagement shape on practice pages, delivery
- * history on case studies, operating rhythm on the homepage.
+ * history on practice pages, operating rhythm on the homepage.
  */
 export function Trace({
   steps,

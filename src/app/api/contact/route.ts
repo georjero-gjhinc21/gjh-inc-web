@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   if (message.length < 20)
     return NextResponse.json({ error: "give us a sentence or two more" }, { status: 422 });
 
-  const to = process.env.CONTACT_TO_EMAIL ?? "info@gjh-inc.com";
+  const to = process.env.CONTACT_TO_EMAIL ?? "consult@gjh-inc.com";
   const key = process.env.RESEND_API_KEY;
 
   if (!key) {
