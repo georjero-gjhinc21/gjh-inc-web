@@ -9,3 +9,10 @@ build/
 next-env.d.ts
 .vercel
 tsconfig.tsbuildinfo
+
+# Content loop (loop/)
+__pycache__/
+*.pyc
+
+# Local-only test config (points at localhost)
+loop/config-live.yaml
