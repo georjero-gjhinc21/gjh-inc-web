@@ -4,7 +4,7 @@ import { practices } from "@/lib/practices";
 import { partners } from "@/lib/partners";
 import { site } from "@/lib/site";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 /**
  * Site assistant — Wave 2.
