@@ -4,6 +4,9 @@ on:
   schedule:
     # Loop 3 — daily audit, 07:00 America/Chicago (12:00 UTC)
     - cron: "0 12 * * *"
+    # Loop 5 — weekly market research, Mondays 06:00 America/Chicago (11:00 UTC)
+    # Runs before the daily audit so the report is on main for the 12:00 UTC run.
+    - cron: "0 11 * * 1"
     # Loop 4 — monthly harness review, 1st of the month
     - cron: "0 14 1 * *"
   workflow_dispatch:
@@ -64,7 +67,8 @@ jobs:
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             python loop/audit.py --dry-run
           else
-            python loop/audit.py
+            # --with-market is harmless when no report exists yet.
+            python loop/audit.py --with-market
           fi
 
 # Auto-ship: a clean audit commits its report + trace to main directly,
@@ -141,6 +145,83 @@ jobs:
           from: ${{ secrets.SMTP_USERNAME }}
           body: ${{ steps.mailbody.outputs.body }}
 
+  research:
+    # Loop 5 — weekly market-alignment research. Auto-ships its report to main
+    # (reports only, never site content), where the daily audit picks it up via
+    # --with-market to grade the site against the market, not in a vacuum.
+    if: github.event.schedule == '0 11 * * 1' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install opencode (research)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm i -g opencode-ai@latest
+      - name: Verify opencode works
+        run: opencode run -m opencode/deepseek-v4-flash-free --format json "ok" >/dev/null
+
+      - run: pip install -r loop/requirements.txt
+
+      - name: Smoke test the research agent
+        run: python loop/research.py --dry-run
+        env:
+          GITHUB_OUTPUT: /dev/null
+
+      - name: Reset smoke-test trace
+        run: git checkout -- history/ 2>/dev/null || true
+
+      - name: Run market research
+        id: research
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python loop/research.py --dry-run
+          else
+            python loop/research.py
+          fi
+
+      - name: Auto-ship market report to main
+        id: autoship
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name  "gjh-content-loop"
+          git config user.email "actions@github.com"
+          git add reports/*-market-alignment.md
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "no report change"
+            exit 0
+          fi
+          git commit -m "content loop: market research $(date -u +%Y-%m-%d)"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          git push origin main
+
+      - name: Email weekly market report notification
+        if: steps.autoship.outputs.changed == 'true'
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Content loop — weekly market report is in"
+          to: georjero@gmail.com
+          from: ${{ secrets.SMTP_USERNAME }}
+          body: |
+            A new market-alignment report was auto-shipped to main.
+            It now feeds the daily audit's grader context.
+            Repo:    ${{ github.repository }}
+            Run:     ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
   improve:
     # Human-in-the-loop: harness proposals are never auto-merged.
     # Loop 4 only runs on the monthly cron or an explicit manual run.
@@ -211,7 +292,7 @@ jobs:
   notify-failure:
     # If anything fails before its own summary email can run, this job still
     # emails the human. Notification only — fails soft.
-    needs: [audit, improve]
+    needs: [audit, research, improve]
     if: failure()
     runs-on: ubuntu-latest
     steps:
