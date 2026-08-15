@@ -1,0 +1,15 @@
+{
+  "id": "fixture-03",
+  "description": "Unverifiable numbers, credential claims with no documentation",
+  "page_text": "We've delivered over 200 AI projects for Fortune 500 clients, achieving 95% accuracy improvements and $50M in cost savings. Our team holds security clearances and we're SOC 2 certified and FedRAMP authorized. We serve 8(a) set-aside contracts and maintain a GSA Schedule. Average project timeline: 6 weeks from kickoff to production deployment.",
+  "expected_scores": {
+    "problem_first": 2,
+    "falsifiability": 0,
+    "differentiation": 2,
+    "buyer_fit": 3,
+    "proof_density": 0,
+    "machine_legibility": 3,
+    "voice_discipline": 3
+  },
+  "rationale": "Numbers with no evidence anchor (200 projects, 95%, $50M, 6 weeks). Forbidden credential terms (security clearance, SOC 2, FedRAMP, 8(a), GSA). Unverifiable claims fail falsifiability."
+}

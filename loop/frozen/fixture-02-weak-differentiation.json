@@ -1,0 +1,15 @@
+{
+  "id": "fixture-02",
+  "description": "Generic positioning, substitutable claims, weak differentiation",
+  "page_text": "We are a leading AI consulting firm helping organizations transform their business with cutting-edge artificial intelligence solutions. Our team of experts leverages machine learning and data science to unlock value and drive innovation. We offer end-to-end AI services from strategy to implementation. Contact us today to start your AI journey.",
+  "expected_scores": {
+    "problem_first": 1,
+    "falsifiability": 1,
+    "differentiation": 1,
+    "buyer_fit": 2,
+    "proof_density": 0,
+    "machine_legibility": 3,
+    "voice_discipline": 0
+  },
+  "rationale": "Opens with capability, not problem. 'Leading', 'cutting-edge', 'unlock value', 'leverage' all banned. Zero specific claims. Competitor could paste this unchanged."
+}

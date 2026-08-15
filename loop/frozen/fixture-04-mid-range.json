@@ -1,0 +1,15 @@
+{
+  "id": "fixture-04",
+  "description": "Mid-range: some strengths, some gaps",
+  "page_text": "Data quality issues block most AI projects before they start. We audit your data infrastructure, identify the gaps, and build the pipelines that fix them. Then we help you build the AI system on top. We work with financial services, healthcare, and manufacturing clients.",
+  "expected_scores": {
+    "problem_first": 4,
+    "falsifiability": 2,
+    "differentiation": 3,
+    "buyer_fit": 3,
+    "proof_density": 2,
+    "machine_legibility": 4,
+    "voice_discipline": 4
+  },
+  "rationale": "Opens with problem (data quality). Lacks specific claims or evidence. Sectors listed but no proof. Voice is clear."
+}

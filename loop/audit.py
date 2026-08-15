@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 import pathlib
@@ -243,6 +244,11 @@ def weighted(scores: dict) -> float:
     return round(sum(scores[k] * w for k, w in RUBRIC_WEIGHTS.items()) / total, 2)
 
 
+def rubric_hash(rubric_text: str) -> str:
+    """Hash of the rubric. A trend line that crosses a rubric change is two trend lines."""
+    return hashlib.sha256(rubric_text.encode()).hexdigest()[:12]
+
+
 # --------------------------------------------------------------------------
 # Orchestration
 # --------------------------------------------------------------------------
@@ -253,7 +259,8 @@ def main() -> int:
     args = ap.parse_args()
 
     cfg = yaml.safe_load(pathlib.Path(args.config).read_text())
-    rubric = (LOOP / "rubric.md").read_text()
+    rubric_text = (LOOP / "rubric.md").read_text()
+    rhash = rubric_hash(rubric_text)
     run_id = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     results = []
 
@@ -270,7 +277,7 @@ def main() -> int:
         print(f"  static: {'pass' if static['passed'] else 'FAIL — ' + '; '.join(static['fails'])}")
 
         text = rendered_text(html)
-        model_grade = stub_grade(static, target) if args.dry_run else grade(text, target, rubric, cfg, static)
+        model_grade = stub_grade(static, target) if args.dry_run else grade(text, target, rubric_text, cfg, static)
         overall = weighted(model_grade["scores"])
         print(f"  overall: {overall}")
 
@@ -295,6 +302,7 @@ def main() -> int:
     run = {
         "run_id": run_id,
         "dry_run": args.dry_run,
+        "rubric_hash": rhash,
         "mean_overall": round(sum(r["overall"] for r in ok) / len(ok), 2) if ok else None,
         "pages": results,
     }
