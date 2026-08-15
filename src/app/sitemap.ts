@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { practices } from "@/lib/practices";
-import { sectors } from "@/lib/sectors";
+import { publishedSectors } from "@/lib/sectors";
 import { getCollection } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
   }));
 
-  const sectorPages = sectors.map((s) => ({
+  const sectorPages = publishedSectors().map((s) => ({
     url: u(`/sectors/${s.slug}`),
     priority: 0.7,
     changeFrequency: "monthly" as const,
