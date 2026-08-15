@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: "gjh-inc.com <no-reply@gjh-inc.com>",
+      from: "gjh-inc.com <consult@gjh-inc.com>",
       to: [to],
       reply_to: email,
       subject: `Enquiry — ${name}${body.organization ? ` (${body.organization})` : ""}`,
