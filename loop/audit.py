@@ -17,12 +17,15 @@ import json
 import os
 import pathlib
 import re
-import subprocess
 import sys
 import time
 
 import requests
 import yaml
+
+# Add parent dir to path so we can import llm module when run as script
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import llm
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LOOP = ROOT / "loop"
@@ -48,6 +51,12 @@ def fetch(url: str, timeout: int = 25) -> str:
         timeout=timeout,
         headers={"User-Agent": "gjh-content-loop/1.0 (+https://gjh-inc.com)"},
     )
+    if not resp.ok:
+        # Diagnose before failing — log what the host is actually blocking
+        print(f"  HTTP {resp.status_code} {resp.reason}", file=sys.stderr)
+        print(f"  headers: {dict(resp.headers)}", file=sys.stderr)
+        print(f"  body (first 500 chars): {resp.text[:500]}", file=sys.stderr)
+        # Do not spoof user agent to bypass — that removes the signal that your own bot rules exist
     resp.raise_for_status()
     return resp.text
 
@@ -132,52 +141,14 @@ Schema:
  "summary": str}"""
 
 
-def _extract_opencode_text(raw: str) -> str:
-    """Pull every assistant text block out of `opencode run --format json` output."""
-    parts = []
-    for line in raw.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            ev = json.loads(line)
-        except json.JSONDecodeError:
-            continue  # stray non-JSON log line — skip
-        if ev.get("type") == "text":
-            parts.append(ev.get("part", {}).get("text", ""))
-    return "\n".join(parts).strip()
-
-
 def call_model(model: str, system: str, prompt: str, max_tokens: int = 4000) -> str:
-    """Drive the loop's model work through the headless opencode CLI.
+    """Route grading through plain HTTP completion — no tool use, no write access.
 
-    Replaces the Anthropic HTTP call with `opencode run` so the harness runs the
-    same coding agent that works on the repo, pointed at a configured model
-    (e.g. a free DeepSeek one) with no API key required.
+    The grader reads text and returns JSON. It needs no tools and must not have
+    filesystem write permission. D5 in DEFECTS.md: a coding agent with --auto
+    grants privileges a classification task should never hold.
     """
-    cmd = [
-        "opencode", "run",
-        "-m", model,
-        "--format", "json",
-        "--pure",                # no external plugins in CI
-        "--auto",                # don't block on permission prompts, headless
-        f"{system}\n\n{prompt}",
-    ]
-    try:
-        proc = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=600,
-            env={**os.environ,
-                 "OPENCODE_DISABLE_PROJECT_CONFIG": "1",
-                 "CI": "1"},
-        )
-    except FileNotFoundError:
-        raise RuntimeError("opencode CLI is not installed (needs `npm i -g opencode-ai` or the install script)")
-    if proc.returncode != 0:
-        raise RuntimeError(f"opencode run failed ({proc.returncode}): {proc.stderr[-400:]}")
-    return _extract_opencode_text(proc.stdout)
+    return llm.completion(model, system, prompt, max_tokens)
 
 
 def parse_grade(raw: str) -> dict:
@@ -277,6 +248,15 @@ def main() -> int:
         })
 
     ok = [r for r in results if "overall" in r]
+    errored = [r for r in results if "error" in r]
+
+    # Guard: if every target errored, write no history and exit non-zero.
+    # A failed run must not look like a quiet one.
+    if errored and not ok:
+        print(f"\nFATAL: all {len(errored)} target(s) failed to fetch. No score produced.", file=sys.stderr)
+        print("Diagnosis logged above. Not writing history — a totally failed run is not a data point.", file=sys.stderr)
+        return 1
+
     run = {
         "run_id": run_id,
         "dry_run": args.dry_run,
