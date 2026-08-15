@@ -4,6 +4,7 @@ summary: "Six pilots that stalled, and what was actually wrong in each. In five 
 date: "2026-07-22"
 topic: "AI systems"
 author: "GJH Inc."
+claims: illustrative
 ---
 
 A pattern shows up often enough now to be worth writing down. An organisation runs an AI pilot. The demo lands. Six weeks later the thing is quietly switched off, and the post-mortem blames the model — too expensive, too slow, hallucinated, not ready.
