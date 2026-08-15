@@ -48,6 +48,12 @@ def fetch(url: str, timeout: int = 25) -> str:
         timeout=timeout,
         headers={"User-Agent": "gjh-content-loop/1.0 (+https://gjh-inc.com)"},
     )
+    if not resp.ok:
+        # Diagnose before failing — log what the host is actually blocking
+        print(f"  HTTP {resp.status_code} {resp.reason}", file=sys.stderr)
+        print(f"  headers: {dict(resp.headers)}", file=sys.stderr)
+        print(f"  body (first 500 chars): {resp.text[:500]}", file=sys.stderr)
+        # Do not spoof user agent to bypass — that removes the signal that your own bot rules exist
     resp.raise_for_status()
     return resp.text
 
@@ -277,6 +283,15 @@ def main() -> int:
         })
 
     ok = [r for r in results if "overall" in r]
+    errored = [r for r in results if "error" in r]
+
+    # Guard: if every target errored, write no history and exit non-zero.
+    # A failed run must not look like a quiet one.
+    if errored and not ok:
+        print(f"\nFATAL: all {len(errored)} target(s) failed to fetch. No score produced.", file=sys.stderr)
+        print("Diagnosis logged above. Not writing history — a totally failed run is not a data point.", file=sys.stderr)
+        return 1
+
     run = {
         "run_id": run_id,
         "dry_run": args.dry_run,
