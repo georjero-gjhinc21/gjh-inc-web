@@ -4,6 +4,7 @@ summary: "Forty graded cases, drawn from real inputs, cost about a day. Skipping
 date: "2026-06-18"
 topic: "Evaluation"
 author: "GJH Inc."
+claims: illustrative
 ---
 
 The single highest-return hour on an AI build is the one spent writing down what a correct answer looks like, before anyone touches a prompt.

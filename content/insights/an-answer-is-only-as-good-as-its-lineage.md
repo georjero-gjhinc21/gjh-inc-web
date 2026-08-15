@@ -4,6 +4,7 @@ summary: "Before you wire a language model to your data, ask whether a number on
 date: "2026-07-30"
 topic: "Data foundations"
 author: "GJH Inc."
+claims: illustrative
 ---
 
 A retrieval system inherits every quality problem in the tables it reads, and then presents them in confident prose. That sentence is doing a lot of work, so let us unpack the part that is least obvious: the retrieval system cannot be more trustworthy than the data's lineage, because the citations it produces are just lineage rendered as prose.
