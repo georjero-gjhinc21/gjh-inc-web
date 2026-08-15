@@ -323,7 +323,7 @@ export const sectors: Sector[] = [
       "Dealer data lives behind a DMS the dealership does not own, filed by model and part, with the ordering clock the network feels long before the OEM does.",
     body: [
       "The dealer's data is ringfenced. The DMS vendor is not required to hand the dealer's own records back in a machine-readable form, so anything to be analyzed has to be extracted from screens, exports, and logs the vendor controls. That makes the data pipeline the first project before any analytics or AI can exist.",
-      "Warranty and parts form the second pole. The OEM's systems of record are larger and cleaner, but they lag the same clock the shop floor feels: a part that should have arrived yesterday is only known today, and the customer is already waiting. Pipeline visibility — not demand forecasting — is where the leverage sits.",
+      "Warranty and parts form the second pole. The OEM's systems of record are larger and cleaner, but they lag the same clock the shop floor feels: a part that should have arrived yesterday is only known today, and the customer is already waiting. Pipeline visibility — not demand forecasting — is what drives improvement.",
     ],
     constraints: [
       "The dealer's data is locked inside a vendor-owned DMS — extraction is a sourcing problem before it is an engineering one",
