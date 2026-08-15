@@ -20,11 +20,11 @@ export const runtime = "edge";
  */
 
 // D7: Forbidden terms that must not appear in assistant output
+// Load from same config the evidence gate uses to avoid duplication
+import claimsConfig from "@/../scripts/claims.config.json";
+
 const FORBIDDEN_OUTPUT_TERMS = [
-  "8(a)", "HUBZone", "SDVOSB", "WOSB", "EDWOSB", "set-aside",
-  "CAGE code", "UEI number", "GSA Schedule", "GWAC", "SEWP", "CIO-SP",
-  "FedRAMP", "SOC 2 certified", "ISO 27001", "HIPAA compliant",
-  "security clearance", "TS/SCI",
+  ...claimsConfig.forbiddenCredentialTerms,
   "$", "USD", "price", "pricing", "cost",
 ] as const;
 
