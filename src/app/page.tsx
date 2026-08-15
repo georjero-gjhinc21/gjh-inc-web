@@ -3,7 +3,7 @@ import { Trace } from "@/components/trace";
 import { CalloutCTA, PartnerWall, SectionHead } from "@/components/ui";
 import { practices } from "@/lib/practices";
 import { partners } from "@/lib/partners";
-import { sectors } from "@/lib/sectors";
+import { publishedSectors, sectorKeywords } from "@/lib/sectors";
 import { getCollection, formatDate } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -112,11 +112,15 @@ export default async function HomePage() {
         <SectionHead
           eyebrow="Industries"
           title="Where the constraints do the talking"
-          lede="Across financial services, manufacturing, healthcare, and more — the constraints change what we build."
-          action={{ href: "/sectors", label: "All industries" }}
+          lede={
+            publishedSectors().length > 0
+              ? "Across financial services, manufacturing, healthcare, and more — the constraints change what we build."
+              : `GJH works across ${sectorKeywords.length} industries. Named case studies are pending client approval.`
+          }
+          action={publishedSectors().length > 0 ? { href: "/sectors", label: "All industries" } : undefined}
         />
         <ul className="grid gap-5 md:grid-cols-2">
-          {sectors.map((s) => (
+          {publishedSectors().map((s) => (
             <li key={s.slug}>
               <Link href={`/sectors/${s.slug}`} className="card-link flex h-full flex-col">
                 <span className="font-mono text-label uppercase text-muted">{s.name}</span>
