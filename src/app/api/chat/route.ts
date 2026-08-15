@@ -14,7 +14,21 @@ export const runtime = "edge";
  * falls outside it, the assistant says so and hands off. That is the whole
  * point — a consultancy that sells AI cannot ship a chatbot that invents its
  * own certifications. See docs/ARCHITECTURE.md § Grounding.
+ *
+ * D7 hardening: input validation, output sanitization, logging with request IDs.
+ * TODO: Per-IP rate limiting (requires middleware — see DEFECTS.md D7).
  */
+
+// D7: Forbidden terms that must not appear in assistant output
+const FORBIDDEN_OUTPUT_TERMS = [
+  "8(a)", "HUBZone", "SDVOSB", "WOSB", "EDWOSB", "set-aside",
+  "CAGE code", "UEI number", "GSA Schedule", "GWAC", "SEWP", "CIO-SP",
+  "FedRAMP", "SOC 2 certified", "ISO 27001", "HIPAA compliant",
+  "security clearance", "TS/SCI",
+  "$", "USD", "price", "pricing", "cost",
+] as const;
+
+const MAX_INPUT_CHARS = 4000;  // Per message, server-enforced
 
 const knowledge = () =>
   [
@@ -48,6 +62,8 @@ ${knowledge()}
 ---`;
 
 export async function POST(req: Request) {
+  const requestId = crypto.randomUUID();
+
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
       { error: "Assistant is not configured yet. Email " + site.email + "." },
@@ -60,14 +76,28 @@ export async function POST(req: Request) {
   };
 
   if (!Array.isArray(messages) || messages.length === 0) {
+    console.error(`[chat:${requestId}] invalid input: not a messages array`);
     return NextResponse.json({ error: "Send a messages array" }, { status: 400 });
+  }
+
+  // D7: Input length validation (reject, don't truncate)
+  for (const msg of messages) {
+    if (typeof msg.content !== "string" || msg.content.length > MAX_INPUT_CHARS) {
+      console.error(`[chat:${requestId}] input too long: ${msg.content?.length || 0} chars`);
+      return NextResponse.json(
+        { error: `Input too long. Max ${MAX_INPUT_CHARS} characters per message.` },
+        { status: 413 }
+      );
+    }
   }
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+  console.log(`[chat:${requestId}] messages: ${messages.length}, last: "${messages[messages.length - 1]?.content?.slice(0, 60)}..."`);
+
   const reply = await client.messages.create({
     model: "claude-sonnet-4-5",
-    max_tokens: 600,
+    max_tokens: 600,  // D7: low output cap (site assistant, not essay generator)
     system: SYSTEM,
     messages: messages.slice(-12),
   });
@@ -77,5 +107,17 @@ export async function POST(req: Request) {
     .map((b) => b.text)
     .join("\n");
 
+  // D7: Output validation — drop if forbidden terms appear
+  const lowerText = text.toLowerCase();
+  for (const term of FORBIDDEN_OUTPUT_TERMS) {
+    if (lowerText.includes(term.toLowerCase())) {
+      console.error(`[chat:${requestId}] BLOCKED: output contained forbidden term "${term}"`);
+      return NextResponse.json({
+        reply: "I cannot answer that. Please contact " + site.email + " directly for those details.",
+      });
+    }
+  }
+
+  console.log(`[chat:${requestId}] ok: ${text.length} chars`);
   return NextResponse.json({ reply: text });
 }
