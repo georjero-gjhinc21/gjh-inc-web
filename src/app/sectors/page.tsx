@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalloutCTA } from "@/components/ui";
-import { sectors } from "@/lib/sectors";
+import { publishedSectors } from "@/lib/sectors";
 
 export const metadata: Metadata = {
   title: "Industries",
@@ -11,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function IndustriesPage() {
+  const published = publishedSectors();
+
   return (
     <>
       <section className="frame border-b border-rule py-20 lg:py-24">
@@ -19,15 +21,32 @@ export default function IndustriesPage() {
           The work looks different in a bank than it does at a builder.
         </h1>
         <p className="lede mt-7 max-w-[60ch]">
-          Thirteen industries where GJH has delivered. Each one has constraints that are
-          load-bearing — the part that makes the work different, before any model
-          is pointed at the data.
+          Industries where GJH has delivered work we can name. Each sector appears here
+          only after completing client-approved work in it — the constraint that keeps
+          this list honest.
         </p>
       </section>
 
       <div className="border-t border-rule bg-paper">
-        <ul className="frame divide-y divide-rule">
-          {sectors.map((s, i) => (
+        {published.length === 0 ? (
+          <div className="frame py-20">
+            <div className="max-w-[60ch]">
+              <h2 className="h3">Waiting on approval</h2>
+              <p className="mt-4 text-muted leading-relaxed">
+                GJH has delivery history across financial services, energy, manufacturing,
+                healthcare, and nine other sectors. None appear here yet because the firm
+                does not publish industry claims without named, client-approved work to back
+                them.
+              </p>
+              <p className="mt-4 text-muted leading-relaxed">
+                Getting one case study approved will unlock the first sector. That is the
+                blocker — a human decision, not a content gap.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <ul className="frame divide-y divide-rule">
+            {published.map((s, i) => (
             <li key={s.slug}>
               <Link
                 href={`/sectors/${s.slug}`}
@@ -59,6 +78,7 @@ export default function IndustriesPage() {
             </li>
           ))}
         </ul>
+        )}
       </div>
 
       <CalloutCTA
