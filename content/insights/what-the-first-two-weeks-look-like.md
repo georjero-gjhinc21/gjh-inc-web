@@ -4,6 +4,7 @@ summary: "No deck, no workshop, no 'alignment'. Five days of shadowing, a data p
 date: "2026-08-05"
 topic: "Engagement"
 author: "GJH Inc."
+claims: illustrative
 ---
 
 Most of what gets written about consultancy is about the deliverable. The part buyers actually have to decide on — what the beginning of an engagement looks like — is usually vague.
