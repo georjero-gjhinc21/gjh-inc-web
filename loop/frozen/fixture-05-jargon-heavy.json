@@ -1,0 +1,15 @@
+{
+  "id": "fixture-05",
+  "description": "Jargon-heavy, weak machine legibility",
+  "page_text": "Our holistic approach synergizes cutting-edge ML/AI capabilities with next-gen data architectures to deliver transformative business outcomes. We leverage proprietary methodologies and best-in-class frameworks to unlock value across the entire data-to-insights continuum.",
+  "expected_scores": {
+    "problem_first": 1,
+    "falsifiability": 1,
+    "differentiation": 0,
+    "buyer_fit": 1,
+    "proof_density": 0,
+    "machine_legibility": 1,
+    "voice_discipline": 0
+  },
+  "rationale": "Banned words: holistic, cutting-edge, next-gen, transformative, leverage, best-in-class, unlock. Pure jargon, no substance."
+}

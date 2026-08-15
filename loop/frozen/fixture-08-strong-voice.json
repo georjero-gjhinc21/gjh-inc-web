@@ -1,0 +1,15 @@
+{
+  "id": "fixture-08",
+  "description": "Strong voice discipline, direct statements",
+  "page_text": "An unverifiable answer is worse than a wrong one. Wrong answers with traceable sources can be corrected. Unverifiable answers get argued about for three weeks and then the project gets switched off. That is the pattern we have seen repeated. Version your data. Keep lineage. Watch freshness. Those are data-engineering habits, not model magic.",
+  "expected_scores": {
+    "problem_first": 4,
+    "falsifiability": 4,
+    "differentiation": 4,
+    "buyer_fit": 4,
+    "proof_density": 3,
+    "machine_legibility": 4,
+    "voice_discipline": 5
+  },
+  "rationale": "Direct, declarative. No hedging. Specific observations (three weeks pattern). Makes falsifiable claims. Clear buyer problem."
+}

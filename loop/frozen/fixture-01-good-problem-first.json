@@ -1,0 +1,15 @@
+{
+  "id": "fixture-01",
+  "description": "Strong problem-first opening, clear buyer fit, evidence-backed claims",
+  "page_text": "Most AI pilots fail not because the model is wrong, but because the data underneath cannot support a reliable weekly report, much less a reliable assistant. We help teams fix the data infrastructure first, then build the AI system that can actually use it. Founded 2009. Partners: Anthropic, Google, AWS, Databricks, Snowflake. Work: advisory (where AI helps and where it doesn't), building (systems that run in production), data foundations (warehouses, pipelines, governance), and staying-with-it (monitoring, tuning, support). Working style: start with a short paid assessment of one workflow so you can judge the work before committing to more. Senior people do the work. You own everything built, with no dependency on us by design.",
+  "expected_scores": {
+    "problem_first": 5,
+    "falsifiability": 5,
+    "differentiation": 4,
+    "buyer_fit": 5,
+    "proof_density": 4,
+    "machine_legibility": 5,
+    "voice_discipline": 4
+  },
+  "rationale": "Opens with the buyer's problem (failed pilots, data issues). Partnership claims are verifiable. Working style is specific and differentiated. Voice is direct."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "fixture-10",
+  "description": "Balanced mid-high scores across criteria",
+  "page_text": "Retrieval systems inherit every quality problem in the source data. If your analytics dashboard cannot trace a number back to its source row, your AI assistant will not produce verifiable citations either. We help teams build the data lineage, freshness checks, and reindexing jobs that make retrieval trustworthy. Founded 2009. Working with financial services and healthcare.",
+  "expected_scores": {
+    "problem_first": 4,
+    "falsifiability": 4,
+    "differentiation": 4,
+    "buyer_fit": 4,
+    "proof_density": 3,
+    "machine_legibility": 4,
+    "voice_discipline": 4
+  },
+  "rationale": "Opens with problem (quality inheritance). Specific technical claim (lineage → citations). Founded date verifiable. Clear buyer segments."
+}

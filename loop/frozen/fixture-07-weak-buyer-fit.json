@@ -1,0 +1,15 @@
+{
+  "id": "fixture-07",
+  "description": "Weak buyer fit, unclear who it's for",
+  "page_text": "We build AI systems using the latest models and techniques. Our solutions help companies improve efficiency and reduce costs. Machine learning, deep learning, NLP, computer vision. Custom models and integrations.",
+  "expected_scores": {
+    "problem_first": 2,
+    "falsifiability": 1,
+    "differentiation": 1,
+    "buyer_fit": 1,
+    "proof_density": 0,
+    "machine_legibility": 2,
+    "voice_discipline": 2
+  },
+  "rationale": "Generic. Could be for any buyer. No specific problem or outcome. Lists technologies but not what they solve."
+}

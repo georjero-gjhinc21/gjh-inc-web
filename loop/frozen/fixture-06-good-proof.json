@@ -1,0 +1,15 @@
+{
+  "id": "fixture-06",
+  "description": "Strong proof density, verifiable claims",
+  "page_text": "This site ships 106 kB First Load JS against a 120 kB budget. The content audit loop (in loop/audit.py) fetches pages, grades them against loop/rubric.md, and writes trend data to history/scores.jsonl. Every claim resolves to an id in content/editorial/ledger.yaml. You can verify all of this by cloning the repo.",
+  "expected_scores": {
+    "problem_first": 3,
+    "falsifiability": 5,
+    "differentiation": 5,
+    "buyer_fit": 3,
+    "proof_density": 5,
+    "machine_legibility": 5,
+    "voice_discipline": 5
+  },
+  "rationale": "Every number is verifiable. Shows the machinery. Unique claims (JS budget discipline, ledger system, runnable audit). Not problem-first but truth-dense."
+}

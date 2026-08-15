@@ -1,0 +1,15 @@
+{
+  "id": "fixture-09",
+  "description": "Missing required positioning signals",
+  "page_text": "We help companies with their data. Consulting services available. Projects and engagements. Get in touch.",
+  "expected_scores": {
+    "problem_first": 1,
+    "falsifiability": 1,
+    "differentiation": 0,
+    "buyer_fit": 1,
+    "proof_density": 0,
+    "machine_legibility": 2,
+    "voice_discipline": 2
+  },
+  "rationale": "No mention of AI, data, consulting specifics. Too vague to assess. Missing all positioning signals."
+}
