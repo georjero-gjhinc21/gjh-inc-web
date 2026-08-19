@@ -38,7 +38,6 @@
       "Edit(src/app/terms/**)",
       "Edit(src/app/privacy/**)",
       "Edit(.github/workflows/**)",
-      "Bash(git push:*)",
       "Bash(gh pr merge:*)",
       "Bash(npm publish:*)",
       "Bash(curl:*)"
