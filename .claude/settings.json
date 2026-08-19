@@ -1,0 +1,50 @@
+{
+  "$comment": "Permissions mirror gate.yaml. An agent that can edit the rubric it is graded against, or the gate that checks it, is not being governed. Keep the two files in sync; the weekly review checks that they agree.",
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Grep(**)",
+      "Glob(**)",
+      "Edit(content/insights/**)",
+      "Edit(content/examples/**)",
+      "Edit(content/editorial/calendar.yaml)",
+      "Write(content/insights/**)",
+      "Write(content/examples/**)",
+      "Write(reports/**)",
+      "Write(loop-run-log.md)",
+      "Bash(npm run check:claims)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run build)",
+      "Bash(npm run dev)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git worktree:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh issue create:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets/**)",
+      "Edit(loop/rubric.md)",
+      "Edit(loop/config.yaml)",
+      "Edit(scripts/check-claims.mjs)",
+      "Edit(scripts/claims.config.json)",
+      "Edit(gate.yaml)",
+      "Edit(src/lib/site.ts)",
+      "Edit(content/editorial/ledger.yaml)",
+      "Edit(src/app/terms/**)",
+      "Edit(src/app/privacy/**)",
+      "Edit(.github/workflows/**)",
+      "Bash(git push:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(npm publish:*)",
+      "Bash(curl:*)"
+    ]
+  },
+  "env": {
+    "GJH_SITE_URL": "https://gjh-inc.com"
+  }
+}

@@ -25,6 +25,13 @@ export const partners: Partner[] = [
     verified: true,
   },
   {
+    slug: "openai",
+    name: "OpenAI",
+    domain: "Models",
+    why: "We deploy GPT-4 and o1 models where clients need them, and offer model choice for teams who need to compare approaches or have existing OpenAI investments.",
+    verified: true,
+  },
+  {
     slug: "databricks",
     name: "Databricks",
     domain: "Lakehouse",
