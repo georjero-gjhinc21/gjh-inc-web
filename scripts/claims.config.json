@@ -144,6 +144,7 @@
   "exemptPaths": [
     "content/TODO-CLIENT-INPUT.md",
     "content/editorial/",
+    "content/internal-kb/",
     "docs/"
   ],
   "_comment_credentials": "Plain literals, matched whole-word with inflections. tenureContradictions below are regexes; everything else in this file is literal."

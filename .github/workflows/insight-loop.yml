@@ -1,0 +1,113 @@
+name: insight loop
+
+# Loop 3 in LOOP.md. Reads the editorial calendar, drafts one piece, checks it,
+# opens a draft PR. Never merges. Never invents a topic.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1,3,5"   # Mon/Wed/Fri 06:00 UTC — three a week, not daily
+  workflow_dispatch:
+    inputs:
+      calendar_id:
+        description: "Specific calendar id to draft (blank = next ready)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: insight-loop
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Kill switch, checked before anything spends a token.
+      - name: Check the kill switch
+        run: |
+          if grep -qE '^\s*paused:\s*true' STATE.md; then
+            echo "STATE.md has paused: true — stopping."
+            exit 78
+          fi
+          if gh issue list --label loop-pause-all --state open --json number -q 'length' | grep -qv '^0$'; then
+            echo "loop-pause-all label is set on an open issue — stopping."
+            exit 78
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      # The calendar is the only source of topics. Empty queue → ask a human.
+      - name: Check the ready-queue
+        id: queue
+        run: |
+          READY=$(grep -c '^\s*status: ready' content/editorial/calendar.yaml || echo 0)
+          echo "ready=$READY" >> "$GITHUB_OUTPUT"
+          echo "$READY entries ready."
+
+      - name: Ask for input instead of writing filler
+        if: steps.queue.outputs.ready == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "Editorial calendar is empty" \
+            --label "editorial" \
+            --body "The drafting loop had nothing marked \`status: ready\` and stopped rather than producing filler.
+
+          Add entries to \`content/editorial/calendar.yaml\`. Each needs a thesis a competent reader could disagree with and an artifact a reader can copy. An entry with neither is a keyword, not a topic.
+
+          Blocked entries and what they are waiting on are listed at the bottom of the calendar."
+          exit 78
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      - name: Draft, check, and open a PR
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Deliberately narrow. This job writes markdown; it has no reason to
+          # touch src/, workflows, or anything in the gate.yaml denylist.
+          allowed_tools: "Read,Grep,Glob,Write,Edit,Bash(npm run check:claims),Bash(npm run build),Bash(npm run typecheck),Bash(git *),Bash(gh pr *)"
+          prompt: |
+            Run the /insight command for gjh-inc.com.
+
+            Target calendar id: "${{ inputs.calendar_id }}" (empty means take the
+            first entry with status: ready).
+
+            Read CLAUDE.md, content/editorial/VOICE.md, content/editorial/ledger.yaml,
+            and the existing articles in content/insights/ before writing anything.
+
+            Use the insight-writer subagent to draft, then the evidence-checker
+            subagent, then the machine-legibility subagent. Apply every blocking
+            finding. Run `npm run check:claims && npm run build` and fix all errors.
+
+            Open a DRAFT pull request labelled `insight` on a branch named
+            `insight/<calendar-id>`. The PR body must contain: the thesis in one
+            sentence, the artifact named, an `## Uncertain` section listing
+            everything you could not verify, both checker verdicts in full, and
+            any ledger entry you are proposing.
+
+            Do not merge. Do not modify any path in the gate.yaml denylist. If
+            the piece cannot be written honestly from available evidence, open an
+            issue explaining what is missing instead of writing it anyway.
+
+      - name: Record the run
+        if: always()
+        run: |
+          printf '%s | insight-loop | %s | %s\n' \
+            "$(date -u +%Y-%m-%dT%H:%MZ)" "${{ job.status }}" \
+            "${{ inputs.calendar_id || 'next-ready' }}" >> loop-run-log.md
+          git config user.name  "gjh-content-loop"
+          git config user.email "actions@github.com"
+          git add loop-run-log.md
+          git diff --staged --quiet || (git commit -m "insight loop: run log" && git push origin HEAD:main)

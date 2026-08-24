@@ -24,7 +24,7 @@
 **Use for:** Web apps, Next.js sites, API routes, GitHub Actions
 
 **Why:**
-- Next.js App Router is best-in-class for static + dynamic
+- Next.js App Router is a proven choice for static + dynamic
 - Edge runtime (Cloudflare Workers/Vercel Edge)
 - Single language for frontend + backend
 - Huge ecosystem, fast iteration

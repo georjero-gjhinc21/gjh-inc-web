@@ -1,0 +1,45 @@
+# Machine-readable safety policy for unattended runs.
+# Read by scripts/check-claims.mjs and by every workflow before it writes.
+# Keep in sync with LOOP.md § Safety.
+version: 1
+
+# An unattended run must never modify these. A PR touching one requires a human
+# author, not a human reviewer.
+denylist:
+  - ".env"
+  - ".env.*"
+  - "**/secrets/**"
+  - "**/*_key*"
+  - "**/*_secret*"
+  # The rubric must not be editable by the thing it grades.
+  - "loop/rubric.md"
+  - "loop/config.yaml"
+  # The gate must not be editable by the thing it gates.
+  - "scripts/check-claims.mjs"
+  - "scripts/claims.config.json"
+  - "gate.yaml"
+  # Single source of truth for every published claim.
+  - "src/lib/site.ts"
+  - "src/lib/partners.ts"
+  - "content/editorial/ledger.yaml"
+  # Legal surface.
+  - "src/app/terms/**"
+  - "src/app/privacy/**"
+  - ".github/workflows/**"
+
+# Largest diff an unattended run may open in one PR. Beyond this, split or
+# escalate — a 40-file PR does not get reviewed, it gets approved.
+maxFiles: 12
+
+# May auto-merge when every check is green. Deliberately excludes content/ and
+# src/ — nothing a reader sees merges without a person.
+autoMergeAllowlist:
+  - "reports/**"
+  - "history/**"
+  - "loop-run-log.md"
+
+# Requires a named human approver regardless of check status.
+requireHumanApproval:
+  - "content/**"
+  - "src/**"
+  - "STATE.md"

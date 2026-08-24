@@ -176,7 +176,7 @@ if (frontMatter.evidence) {
 **Why this works:**
 - Clear separation: claims in article, proof in ledger
 - Human reviews ledger entries (not scattered through content)
-- Status change (needs-approval → published) unlocks all articles using it
+- Status change (needs-approval → published) makes live all articles using it
 - Audit trail: who claimed what, based on what source
 
 ---

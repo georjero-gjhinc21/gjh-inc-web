@@ -1,0 +1,288 @@
+# Editorial calendar
+#
+# The drafting loop reads the first item with `status: ready` and writes it.
+# It cannot invent a topic. An empty ready-queue opens an issue asking for
+# input rather than producing filler — a consultancy that publishes daily
+# whether or not it has something to say has replaced its own argument.
+#
+# Each entry must carry a `thesis` a competent reader could disagree with and
+# an `artifact` the reader can copy. An entry with neither is not a topic, it
+# is a keyword.
+#
+# status: ready | drafting | in-review | published | blocked
+# kind:   insight (argument) | example (runnable artifact) | teardown (system analysis)
+
+cadence:
+  insights_per_week: 3
+  examples_per_month: 2
+  # Deliberately not daily. Three defensible pieces a week outruns five
+  # forgettable ones on every metric a buyer uses, including the only one that
+  # matters, which is whether the piece gets forwarded internally.
+
+queue:
+  # -------------------------------------------------------------------------
+  # Evaluation — the strongest ground, because almost nobody publishes here
+  # -------------------------------------------------------------------------
+  - id: golden-set-anatomy
+    kind: example
+    status: ready
+    title: "The golden set: forty cases, a schema, and a script"
+    thesis: >
+      A golden test set is a versioned artifact with a schema, not a
+      spreadsheet. If it is not in the repo next to the code it grades, it is
+      not a test set, it is a memory of one.
+    artifact: "A JSONL schema, a grading script, and a CI job that fails the build on regression."
+    audience: "platform engineer inheriting an AI system with no tests"
+    evidence: [content-loop-harness]
+
+  - id: rubric-versioning
+    kind: insight
+    status: ready
+    title: "Version your rubric or your scores mean nothing"
+    thesis: >
+      A score is only comparable to another score graded by the same rubric.
+      Most teams edit the rubric and keep the history, which produces a trend
+      line measuring the rubric rather than the system.
+    artifact: "Rubric hash in every score trace; a migration note when the hash changes."
+    audience: "anyone running an LLM-as-judge pipeline"
+    evidence: [content-loop-harness]
+
+  - id: judge-calibration
+    kind: insight
+    status: ready
+    title: "Check the judge before you trust the judge"
+    thesis: >
+      A model grading a model is a measurement instrument with an unmeasured
+      error rate. Calibrate against human labels on a subset, publish the
+      agreement rate, and re-check it every time you change the judge model.
+    artifact: "Agreement-rate calculation and the sample size needed to detect drift."
+    audience: "team scaling evaluation past what humans can grade"
+
+  - id: score-inflation
+    kind: insight
+    status: ready
+    title: "The self-improving system that only improved its own grading"
+    thesis: >
+      Any loop allowed to propose changes to its own rubric will find that
+      lowering the bar is cheaper than clearing it. The fix is structural, not
+      a sentence in a prompt.
+    artifact: "The three mechanical guards: rubric in a denylisted path, held-out frozen cases, human merge on rubric diffs."
+    audience: "anyone building a self-improvement loop"
+    evidence: [content-loop-harness]
+
+  # -------------------------------------------------------------------------
+  # Retrieval — where the assessments keep finding the same failures
+  # -------------------------------------------------------------------------
+  - id: retrieval-mode-registry
+    kind: teardown
+    status: ready
+    title: "Twenty retrieval modes is not a feature, it is an unresolved evaluation problem"
+    thesis: >
+      When a platform ships a configurable registry of retrieval strategies,
+      it usually means nobody could measure which one is right, so the choice
+      was pushed to the caller. Configuration is where undecided questions go
+      to become someone else's problem.
+    artifact: "A decision procedure: how to collapse N modes to two with a golden set."
+    audience: "architect defending a retrieval platform in a design review"
+    evidence: [bank-rag-assessment]
+    note: "Generalised form only. No institution, no platform name."
+
+  - id: entitlements-at-query-time
+    kind: insight
+    status: ready
+    title: "Document-level permissions have to be enforced at query time, not at index time"
+    thesis: >
+      Filtering after retrieval leaks through the ranking. Filtering at index
+      time means a re-index every permission change. The only correct place is
+      the query, and it has to be in the vector filter, not the application.
+    artifact: "Query-time filter patterns for a permissioned corpus, and the test that proves it."
+    audience: "engineer building RAG over an enterprise document store"
+    evidence: [bank-rag-assessment]
+
+  - id: chunking-plateau
+    kind: insight
+    status: ready
+    title: "When chunking experiments plateau at 50%, the problem is not chunking"
+    thesis: >
+      Accuracy that will not move past coin-flip after a month of chunk-size
+      tuning is a document-understanding problem, not a retrieval problem.
+      Shipping a polished interface over it converts a technical failure into
+      an organisational one.
+    artifact: "A triage sequence that separates parse failures from retrieval failures from generation failures."
+    audience: "team whose document AI accuracy has stopped improving"
+    evidence: [bank-rag-assessment]
+
+  - id: retrieval-regression-gate
+    kind: example
+    status: ready
+    title: "A retrieval regression gate you can add in an afternoon"
+    thesis: >
+      Retrieval quality degrades silently on re-index, model swap, and
+      dependency bump. A gate that runs fifty queries and compares recall@k
+      against a stored baseline catches all three.
+    artifact: "Runnable gate: baseline file, comparison script, GitHub Action."
+    audience: "anyone running retrieval in production without tests"
+
+  # -------------------------------------------------------------------------
+  # Agents and loops — the firm's positioning, argued rather than asserted
+  # -------------------------------------------------------------------------
+  - id: four-loops
+    kind: insight
+    status: ready
+    title: "Four loops, and most systems only have the first one"
+    thesis: >
+      Agent loop, verification loop, event-driven loop, self-improvement loop.
+      Each is a distinct engineering problem with distinct failure modes, and
+      the value compounds only when they are stacked in that order. Systems
+      that skip the verification loop are demos with a scheduler.
+    artifact: "The ladder, with what each rung costs and what it buys."
+    audience: "engineering lead deciding what to build after a successful pilot"
+    evidence: [content-loop-harness]
+
+  - id: single-completion-is-fine
+    kind: insight
+    status: ready
+    title: "Most of what gets called an agent should be a single grounded completion"
+    thesis: >
+      A loop is justified by a decision the system has to make about its own
+      next step. If the next step is always the same, a loop adds latency,
+      cost, and a new class of failure in exchange for nothing.
+    artifact: "A four-question test for whether the work needs a loop."
+    audience: "team about to add an orchestration framework"
+    evidence: [site-first-load]
+
+  - id: human-gate-is-the-product
+    kind: insight
+    status: ready
+    title: "The human gate is the feature, not the limitation"
+    thesis: >
+      Autonomy staged L1 → L2 → L3 is not timidity. It is how you find out
+      what the loop gets wrong while the cost of being wrong is a discarded
+      draft rather than a published claim.
+    artifact: "The promotion criteria for each level, and what evidence justifies each."
+    audience: "executive asking why the agent needs approval"
+    evidence: [content-loop-harness]
+
+  - id: deterministic-first
+    kind: insight
+    status: ready
+    title: "Everything a regex can decide, a regex should decide"
+    thesis: >
+      Model calls are the most expensive, least reproducible component in any
+      pipeline. A deterministic pre-grader in front of the model cuts spend,
+      produces a trend line that is actually comparable across runs, and
+      catches the failures a model is worst at catching.
+    artifact: "The pre-grader from this site's own harness, and the rules it enforces."
+    audience: "anyone paying per token for classification"
+    evidence: [content-loop-harness]
+
+  - id: traces-nobody-reads
+    kind: insight
+    status: ready
+    title: "Collecting traces is not observability"
+    thesis: >
+      Most teams that instrument their AI system stop at collection. Traces
+      that no scheduled job reads are a storage cost. The self-improvement
+      loop is what converts them into a system that gets better.
+    artifact: "The minimum trace schema that supports trend analysis, and the query that finds recurring failures."
+    audience: "team with tracing on and no idea what it is telling them"
+
+  # -------------------------------------------------------------------------
+  # Data foundations — the practice since 2009, and the least crowded ground
+  # -------------------------------------------------------------------------
+  - id: rag-inherits-your-data
+    kind: insight
+    status: ready
+    title: "A retrieval system inherits every quality problem in the tables it reads, then states them confidently"
+    thesis: >
+      Most disappointing AI projects are data problems wearing a different hat.
+      The model does not fix a broken join key; it hides it behind fluent prose.
+    artifact: "The five data checks to run before scoping any RAG build."
+    audience: "sponsor whose pilot produced plausible wrong answers"
+
+  - id: identity-is-not-clean
+    kind: insight
+    status: ready
+    title: "Your identifiers do not join and the model will not tell you"
+    thesis: >
+      Cross-system identity is a data policy decision, not an engineering
+      detail to resolve three layers down. Every industry has its version:
+      VIN and part number, driver and asset, traveller and guest.
+    artifact: "An identity-resolution checklist to run in week one."
+    audience: "data lead scoping a cross-system analytics build"
+
+  - id: semantic-layer-for-machines
+    kind: insight
+    status: ready
+    title: "The semantic layer is now a machine-readability decision"
+    thesis: >
+      Buyers and their agents both arrive through a query interface. A model
+      querying your warehouse needs the same thing an analyst needs — named
+      metrics with stated definitions — and the absence of one is why
+      text-to-SQL demos do not survive contact with a real schema.
+    artifact: "A minimal metric-definition format and how it changes generated SQL."
+    audience: "analytics engineer being asked for a natural-language interface"
+
+  # -------------------------------------------------------------------------
+  # The site itself — dogfood, and the cheapest evidence to publish
+  # -------------------------------------------------------------------------
+  - id: this-site-runs-a-loop
+    kind: example
+    status: ready
+    title: "This site audits itself every morning, and here is the harness"
+    thesis: >
+      A consultancy claiming to build loop-engineered systems should be able to
+      show one running against its own public surface. The code is in the repo,
+      the score history is committed, and the failures are visible.
+    artifact: "The full harness: config, rubric, pre-grader, grader, trend analysis, workflow."
+    audience: "technical buyer deciding whether the positioning is real"
+    evidence: [content-loop-harness, site-first-load]
+    note: "Highest-value item in the queue. It needs no client approval and it is falsifiable by anyone who clones the repo."
+
+  - id: machine-legibility
+    kind: insight
+    status: ready
+    title: "Half your buyers are agents now, and they cannot read your hero image"
+    thesis: >
+      Value propositions that exist only in a JS-hydrated component or a graphic
+      are invisible to the retrieval systems that increasingly do the shortlisting.
+      Server-rendered text, honest schema markup, and headings that state claims
+      are now a distribution decision.
+    artifact: "The static check: rendered word count, JSON-LD validation, heading audit."
+    audience: "marketing lead whose traffic is flat despite good content"
+    evidence: [content-loop-harness]
+
+  - id: llms-txt
+    kind: example
+    status: ready
+    title: "What to put in llms.txt when you have nothing to hide and something to prove"
+    thesis: >
+      The file is only useful if it points at claims that survive checking. A
+      llms.txt full of marketing adjectives is worse than none — it hands a
+      summariser the exact sentences you would not want quoted back.
+    artifact: "A generated llms.txt sourced from the same modules the pages render from."
+    audience: "anyone adding llms.txt because they read that they should"
+
+  # -------------------------------------------------------------------------
+  # Blocked — real topics waiting on a human decision
+  # -------------------------------------------------------------------------
+  - id: first-case-study
+    kind: example
+    status: blocked
+    blocked_on: "one client approval. This is the launch blocker in STATE.md."
+    title: "(case study — subject depends on which approval lands first)"
+    thesis: "Named client, real numbers, and the trace of what actually happened week by week."
+    artifact: "Engagement trace with real dates and real outcomes."
+    audience: "every buyer"
+    note: >
+      Nothing in this queue substitutes for this. Twenty good articles move a
+      buyer from unaware to interested. One case study moves them to a call.
+
+  - id: proof-numbers
+    kind: insight
+    status: blocked
+    blocked_on: "engagements-delivered and median-time-to-first-system in ledger.yaml"
+    title: "(the numbers piece)"
+    thesis: "Tenure and throughput, stated exactly, with the method for counting."
+    artifact: "The counting method, published, so the number is checkable."
+    audience: "procurement"

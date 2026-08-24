@@ -1,0 +1,102 @@
+# Evidence ledger
+#
+# Every number, client reference, and outcome claim on the public site resolves
+# to an id in here. `scripts/check-claims.mjs` enforces it. Nothing with a
+# status other than `published` may appear on a rendered page.
+#
+# status:
+#   published      — written approval on file, safe to name and quantify
+#   needs-approval — real work, no client sign-off yet. Publishable only in
+#                    generalised form with no identifying detail
+#   internal       — true, ours, never client-facing
+#   proposed       — not yet true. A plan, not evidence
+#
+# Adding an entry is a human commit. Agents may read this file and may propose
+# additions in a PR body, but gate.yaml denylists it against unattended writes.
+
+- id: founded-2009
+  claim: "GJH Inc. has been consulting since 2009."
+  source: "gjh-inc.com, stated publicly since launch"
+  status: published
+  owner: george
+
+- id: partners-five
+  claim: "Partnerships with Anthropic, Google, AWS, Databricks, and Snowflake."
+  source: "src/lib/partners.ts, taken from the live site; confirm currency annually"
+  status: published
+  owner: george
+  review_by: "2027-01-31"
+
+- id: practices-four
+  claim: "Four practices: advisory, building, data foundations, staying-with-it."
+  source: "src/lib/practices.ts"
+  status: published
+  owner: george
+
+- id: site-first-load
+  claim: "The site ships ~106 kB First Load JS against a 120 kB budget."
+  source: "next build output, this repo, reproducible by anyone who clones it"
+  status: published
+  owner: george
+  note: >
+    Unusually good evidence: the reader can verify it themselves in one command.
+    Use it when arguing that constraints are a discipline rather than a slogan.
+
+- id: content-loop-harness
+  claim: >
+    A scheduled content-audit loop: deterministic pre-grader, model grader with
+    schema validation and retry, weighted rubric, trend analysis, and harness
+    change proposals gated behind human review.
+  source: "loop/ in this repo, and .github/workflows/content-loop.yml"
+  status: published
+  owner: george
+  note: "Our own dogfood. The strongest example asset we have that costs no client approval."
+
+# ---------------------------------------------------------------------------
+# Client work — generalised until approval lands
+# ---------------------------------------------------------------------------
+
+- id: bank-rag-assessment
+  claim: >
+    Architecture assessment of an internal retrieval platform at a large retail
+    bank: 20 retrieval modes, 11 services, 5 datastores, workflow orchestration.
+    Findings covered document-level entitlements at query time, the absence of a
+    golden test set, rubric versioning in score traces, and a regression gate.
+  source: "engagement artifacts, held privately"
+  status: needs-approval
+  owner: george
+  blocked_on: "client approval to reference the engagement, even unnamed"
+  generalised_form: >
+    Safe to write about the pattern — a retrieval platform that turned an
+    unresolved evaluation problem into a configuration surface — without naming
+    the institution, the platform, or the team.
+
+- id: automotive-dms-extraction
+  claim: "Dealer data extraction and analytics against a vendor-controlled DMS."
+  source: "src/lib/sectors.ts automotive entry"
+  status: needs-approval
+  owner: george
+
+- id: transportation-reconciliation
+  claim: "Reconciliation of dispatch, telematics, and billing mileage for a carrier."
+  source: "src/lib/sectors.ts transportation entry"
+  status: needs-approval
+  owner: george
+
+# ---------------------------------------------------------------------------
+# Placeholders that must not be published until real
+# ---------------------------------------------------------------------------
+
+- id: engagements-delivered
+  claim: "Total engagements delivered since 2009."
+  source: "not yet supplied"
+  status: proposed
+  owner: george
+  blocked_on: "a defensible count. A round number that is wrong is worse than no number."
+
+- id: median-time-to-first-system
+  claim: "Median time from kickoff to a first working system."
+  source: "not yet supplied"
+  status: proposed
+  owner: george
+  blocked_on: "three delivered engagements with recorded dates"

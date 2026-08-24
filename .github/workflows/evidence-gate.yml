@@ -1,0 +1,85 @@
+name: evidence gate
+
+# The cheap check runs first and blocks. Everything a regex can decide is
+# decided here, in seconds, for nothing, identically every time. Model-based
+# review downstream is then only asked for judgement.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Which files this change touches — feeds the denylist and size check.
+      - name: Collect changed paths
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+          FILES=$(git diff --name-only "$BASE" "$HEAD" 2>/dev/null | paste -sd, - || echo "")
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+
+      # Only enforce the denylist against unattended authors. A person editing
+      # site.ts is doing their job; a loop editing site.ts is a policy failure.
+      - name: Evidence gate
+        id: gate
+        run: |
+          AUTHOR="${{ github.event.pull_request.user.login || github.actor }}"
+          case "$AUTHOR" in
+            *"[bot]"|gjh-content-loop|github-actions)
+              node scripts/check-claims.mjs --changed "${{ steps.changed.outputs.files }}" ;;
+            *)
+              node scripts/check-claims.mjs ;;
+          esac
+
+      - run: npm run typecheck
+
+      - name: Build and record the JS budget
+        run: |
+          npm run build | tee build.log
+          FIRST_LOAD=$(grep -oE 'First Load JS shared by all[^0-9]*([0-9.]+) kB' build.log | grep -oE '[0-9.]+' | head -1)
+          echo "First Load JS: ${FIRST_LOAD:-unknown} kB (budget 120)"
+          if [ -n "$FIRST_LOAD" ]; then
+            awk -v v="$FIRST_LOAD" 'BEGIN { if (v+0 > 120) { print "OVER BUDGET"; exit 1 } }'
+          fi
+
+      # A failing gate should teach, not just fail.
+      - name: Explain the failure on the PR
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Evidence gate failed"
+            echo ""
+            echo '```'
+            node scripts/check-claims.mjs || true
+            echo '```'
+            echo ""
+            echo "Each finding carries the fix. If a rule is wrong, change the rule in a separate PR — do not work round it in the copy."
+          } > comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file comment.md
