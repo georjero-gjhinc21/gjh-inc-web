@@ -36,6 +36,8 @@ jobs:
       report: ${{ steps.run.outputs.report_path }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -96,7 +98,15 @@ jobs:
             sed 's/^/  - /'; echo ""; \
             echo "Commit: \`$SHA\` (${{ github.server_url }}/${{ github.repository }}/commit/$SHA)"; } \
             > "$GITHUB_WORKSPACE/tmp-change-summary.md"
-          git push origin main
+          # Push with rebase to handle concurrent pushes (audit + research on Mondays, or manual push race)
+          for i in 1 2 3; do
+            git fetch origin main && git rebase origin/main && git push origin main && break
+            echo "push failed (attempt $i), retrying in $((i*3))s..."
+            sleep $((i*3))
+            git rebase --abort 2>/dev/null || true
+          done
+          # Verify push succeeded
+          git fetch origin main && git log --oneline origin/main -1 | grep -q "$SHA" || { echo "push failed after 3 attempts"; exit 1; }
 
       # Build the full email body with per-file change details so the daily
       # mail shows exactly what landed, with a link to each commit.
@@ -154,6 +164,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -202,7 +214,12 @@ jobs:
           fi
           git commit -m "content loop: market research $(date -u +%Y-%m-%d)"
           echo "changed=true" >> "$GITHUB_OUTPUT"
-          git push origin main
+          for i in 1 2 3; do
+            git fetch origin main && git rebase origin/main && git push origin main && break
+            echo "push failed (attempt $i), retrying in $((i*3))s..."
+            sleep $((i*3))
+            git rebase --abort 2>/dev/null || true
+          done
 
       - name: Email weekly market report notification
         if: steps.autoship.outputs.changed == 'true'
