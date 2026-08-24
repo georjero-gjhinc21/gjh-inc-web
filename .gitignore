@@ -16,3 +16,14 @@ __pycache__/
 
 # Local-only test config (points at localhost)
 loop/config-live.yaml
+
+# Kit extraction artifacts (never commit)
+*.zip
+*.zip:Zone.Identifier
+*.tar.gz
+/package.json.snippet
+/calendar.yaml
+/check-claims.mjs
+/CONTENT-ENGINE.md
+/DEFECTS.md
+/{.claude
