@@ -162,6 +162,9 @@ def call_model(model: str, system: str, prompt: str, max_tokens: int = 4000) -> 
     same coding agent that works on the repo, pointed at a configured model
     (e.g. a free DeepSeek one) with no API key required.
     """
+    # Normalize deprecated deepseek alias (removed 2026-08, UnknownError)
+    if "deepseek-v4-flash" in model:
+        model = "opencode/muse-spark-1.2-contributor-free"
     cmd = [
         "opencode", "run",
         "-m", model,

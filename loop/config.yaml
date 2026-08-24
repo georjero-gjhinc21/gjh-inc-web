@@ -13,8 +13,9 @@ competitors:
   - https://zireh.com.au/
 
 models:
-  grader: opencode/deepseek-v4-flash-free   # loop 2 — runs every cycle, high volume, free
-  improver: opencode/deepseek-v4-flash-free # loop 4 — runs on trend, low volume
+  grader: opencode/muse-spark-1.2-contributor-free   # loop 2 — runs every cycle, high volume, free (was deepseek-v4-flash-free, removed 2026-08)
+  improver: opencode/muse-spark-1.2-contributor-free # loop 4 — runs on trend, low volume
+  researcher: opencode/muse-spark-1.2-contributor-free # loop 5 — weekly market, free
 
 thresholds:
   # Below this overall score the workflow opens a P1 issue instead of a routine PR.

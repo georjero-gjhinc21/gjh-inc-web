@@ -48,7 +48,7 @@ jobs:
           node-version: "20"
       - run: npm i -g opencode-ai@latest
       - name: Verify opencode works
-        run: opencode run -m opencode/deepseek-v4-flash-free --format json "ok" >/dev/null
+        run: opencode run -m opencode/muse-spark-1.2-contributor-free --format json --pure "ok" >/dev/null
 
       - run: pip install -r loop/requirements.txt
 
@@ -166,7 +166,7 @@ jobs:
           node-version: "20"
       - run: npm i -g opencode-ai@latest
       - name: Verify opencode works
-        run: opencode run -m opencode/deepseek-v4-flash-free --format json "ok" >/dev/null
+        run: opencode run -m opencode/muse-spark-1.2-contributor-free --format json --pure "ok" >/dev/null
 
       - run: pip install -r loop/requirements.txt
 

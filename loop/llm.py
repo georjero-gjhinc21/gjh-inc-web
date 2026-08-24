@@ -11,9 +11,9 @@ Every model call in the loop goes through this module so that:
 Config lives in loop/config.yaml:
 
   models:
-    grader:     opencode/deepseek-v4-flash-free   # the CLI route
-    improver:   opencode/deepseek-v4-flash-free
-    researcher: opencode/deepseek-v4-flash-free
+    grader:     opencode/muse-spark-1.2-contributor-free   # the CLI route (free)
+    improver:   opencode/muse-spark-1.2-contributor-free
+    researcher: opencode/muse-spark-1.2-contributor-free
 
   litellm_fallbacks:          # optional, tried in order after the CLI route
     - openai/gpt-4o-mini
@@ -107,13 +107,14 @@ def _call_litellm(model: str, system: str, prompt: str, max_tokens: int = 4000) 
 
 
 def _normalise_model(model: str) -> str:
-    """Coerce a plain 'deepseek-v4-flash-free' into the opencode route prefix."""
+    """Coerce deprecated aliases into the current free route."""
     if "/" in model and not model.startswith(OPENCODE_PREFIX):
         return model  # provider/model — a litellm route
     base = model.removeprefix(OPENCODE_PREFIX)
-    for alias in ("deepseek", "deepseek-v4", "deepseek-v4-flash-free"):
+    # deepseek-v4-flash-free was removed 2026-08 (opencode UnknownError); map to current free model
+    for alias in ("deepseek", "deepseek-v4", "deepseek-v4-flash-free", "deepseek-v4-flash"):
         if base == alias:
-            return f"{OPENCODE_PREFIX}deepseek-v4-flash-free"
+            return f"{OPENCODE_PREFIX}muse-spark-1.2-contributor-free"
     return model
 
 
