@@ -30,7 +30,7 @@ export const nav = [
 /** Proof numbers. Each needs a source before it ships. */
 export const proof = [
   { value: "2009", label: "Consulting since", note: "verified — stated on gjh-inc.com" },
-  { value: "5", label: "Cloud & AI partnerships", note: "verified — Anthropic, Google, AWS, Databricks, Snowflake" },
+  { value: "6", label: "Cloud & AI partnerships", note: "verified — Anthropic, OpenAI, Google, AWS, Databricks, Snowflake" },
   { value: "TBD", label: "Engagements delivered", note: "NEEDS GJH INPUT" },
   { value: "TBD", label: "Median time to first working system", note: "NEEDS GJH INPUT" },
 ] as const;

@@ -138,7 +138,7 @@ export default async function HomePage() {
         <SectionHead
           eyebrow="Partnerships"
           title="Platforms we build on"
-          lede="Five partnerships, each earning its place. What matters is what we do with them."
+          lede="Six partnerships, each earning its place. What matters is what we do with them."
           action={{ href: "/partners", label: "Details" }}
         />
         <PartnerWall items={partners.map(({ name, domain, why }) => ({ name, domain, why }))} />

@@ -17,6 +17,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write # required for anthropics/claude-code-action@v1 OIDC auth
 
 concurrency:
   group: insight-loop
