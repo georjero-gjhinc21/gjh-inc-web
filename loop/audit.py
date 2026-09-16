@@ -8,6 +8,8 @@ Loop 4 input: append every run to history/scores.jsonl so trends are computable.
 Run:
     python loop/audit.py                 # live, needs ANTHROPIC_API_KEY
     python loop/audit.py --dry-run       # fixtures + stub grader, no network, no tokens
+    python loop/audit.py --with-market   # live + latest reports/*-market-alignment.md as grader context
+                                         # (harmless when no report exists yet)
 """
 from __future__ import annotations
 
@@ -64,6 +66,12 @@ def load_fixture(target_id: str) -> str:
     if not path.exists():
         raise FileNotFoundError(f"no fixture for '{target_id}' at {path}")
     return path.read_text(encoding="utf-8")
+
+
+def latest_market_report() -> pathlib.Path | None:
+    """Most recent Loop 5 market-alignment report, if one has been shipped yet."""
+    candidates = sorted((ROOT / "reports").glob("*-market-alignment.md"))
+    return candidates[-1] if candidates else None
 
 
 def rendered_text(html: str) -> str:
@@ -205,12 +213,14 @@ def parse_grade(raw: str) -> dict:
     return obj
 
 
-def grade(page_text: str, target: dict, rubric: str, cfg: dict, static: dict) -> dict:
+def grade(page_text: str, target: dict, rubric: str, cfg: dict, static: dict, market_context: str = "") -> dict:
     """The verification loop: grade, validate, retry with the error fed back."""
+    market_section = f"MARKET CONTEXT (latest market-alignment report, for relevancy gaps only)\n{market_context[:8000]}\n\n" if market_context else ""
     prompt = (
         f"RUBRIC\n{rubric}\n\n"
         f"PAGE INTENT\n{target['intent']}\n\n"
         f"DETERMINISTIC PRE-GRADER FINDINGS\n{json.dumps(static['fails'], indent=2)}\n\n"
+        f"{market_section}"
         f"RENDERED PAGE TEXT (url: {target['url']})\n{page_text[:60000]}"
     )
     last_err = None
@@ -258,6 +268,7 @@ def rubric_hash(rubric_text: str) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="fixtures + stub grader, no network or tokens")
+    ap.add_argument("--with-market", action="store_true", help="include latest reports/*-market-alignment.md as grader context (harmless when none exists)")
     ap.add_argument("--config", default=str(LOOP / "config.yaml"))
     args = ap.parse_args()
 
@@ -266,6 +277,20 @@ def main() -> int:
     rhash = rubric_hash(rubric_text)
     run_id = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     results = []
+
+    market_context = ""
+    market_report: str | None = None
+    if args.with_market:
+        report = latest_market_report()
+        if report is not None:
+            market_report = report.name
+            try:
+                market_context = report.read_text(encoding="utf-8")
+            except OSError as exc:
+                print(f"  market report unreadable ({report.name}): {exc} — continuing without it", file=sys.stderr)
+                market_report = None
+        else:
+            print("  no market-alignment report yet — continuing without market context", file=sys.stderr)
 
     for target in cfg["targets"]:
         print(f"[{target['id']}] {target['url']}")
@@ -280,7 +305,7 @@ def main() -> int:
         print(f"  static: {'pass' if static['passed'] else 'FAIL — ' + '; '.join(static['fails'])}")
 
         text = rendered_text(html)
-        model_grade = stub_grade(static, target) if args.dry_run else grade(text, target, rubric_text, cfg, static)
+        model_grade = stub_grade(static, target) if args.dry_run else grade(text, target, rubric_text, cfg, static, market_context)
         overall = weighted(model_grade["scores"])
         print(f"  overall: {overall}")
 
@@ -305,6 +330,8 @@ def main() -> int:
     run = {
         "run_id": run_id,
         "dry_run": args.dry_run,
+        "with_market": args.with_market,
+        "market_report": market_report,
         "rubric_hash": rhash,
         "mean_overall": round(sum(r["overall"] for r in ok) / len(ok), 2) if ok else None,
         "pages": results,

@@ -5,7 +5,7 @@ import { partners } from "@/lib/partners";
 export const metadata: Metadata = {
   title: "Partners",
   description:
-    "GJH Inc. partners with Anthropic, Databricks, Snowflake, AWS, and Google — and builds in the client's own accounts.",
+    "GJH Inc. partners with Anthropic, OpenAI, Databricks, Snowflake, AWS, and Google — and builds in the client's own accounts.",
   alternates: { canonical: "/partners" },
 };
 
@@ -14,7 +14,7 @@ export default function PartnersPage() {
     <>
       <section className="frame border-b border-rule py-20">
         <p className="eyebrow">Partners</p>
-        <h1 className="h1 mt-5 max-w-[18ch]">Five partnerships, each earning its place.</h1>
+        <h1 className="h1 mt-5 max-w-[18ch]">Six partnerships, each earning its place.</h1>
         <p className="lede mt-7">
           A long logo wall is a claim about relationships, not capability. These are the platforms we
           actually build on, with what we do on each one stated plainly.
