@@ -17,6 +17,12 @@ __pycache__/
 # Local-only test config (points at localhost)
 loop/config-live.yaml
 
+# Agent session transcripts (local only, never commit)
+session-*.md
+session/
+.opencode/session*
+.claude/session*
+
 # Kit extraction artifacts (never commit)
 *.zip
 *.zip:Zone.Identifier
