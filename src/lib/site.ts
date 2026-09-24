@@ -17,6 +17,13 @@ export const site = {
   tagline: "Consulting for organizations putting AI to work.",
   description:
     "GJH Inc. helps teams find where AI genuinely helps, build the systems that deliver it, and keep the data underneath in good order. Consulting since 2009.",
+  address: {
+    street: "28 Geary St, Suite 650 PMB 5481",
+    city: "San Francisco",
+    region: "CA",
+    postal: "94108",
+    country: "United States",
+  },
 } as const;
 
 export const nav = [
@@ -47,6 +54,14 @@ export function organizationJsonLd() {
     foundingDate: site.founded,
     description: site.description,
     sameAs: [site.linkedin],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: site.address.street,
+      addressLocality: site.address.city,
+      addressRegion: site.address.region,
+      postalCode: site.address.postal,
+      addressCountry: site.address.country,
+    },
     knowsAbout: [
       "Artificial intelligence consulting",
       "Data engineering",

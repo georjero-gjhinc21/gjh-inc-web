@@ -15,8 +15,7 @@ export default function ContactPage() {
         <p className="eyebrow">Contact</p>
         <h1 className="h1 mt-5 max-w-[16ch]">Tell us what you&apos;re trying to do.</h1>
         <p className="lede mt-7">
-          A paragraph is plenty. You will get a reply from someone who would work on it, not a
-          scheduler bot.
+          A paragraph is plenty. We reply within two business days.
         </p>
       </section>
 
@@ -34,6 +33,13 @@ export default function ContactPage() {
             <a href={site.linkedin} rel="noopener" className="mt-2 block text-indigo underline underline-offset-2">
               LinkedIn
             </a>
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              {site.address.street}
+              <br />
+              {site.address.city}, {site.address.region} {site.address.postal}
+              <br />
+              {site.address.country}
+            </p>
           </div>
 
           <div className="card mt-5">

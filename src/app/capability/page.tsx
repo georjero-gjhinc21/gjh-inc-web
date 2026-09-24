@@ -45,7 +45,7 @@ export default function CapabilityPage() {
           <ul className="mt-5 divide-y divide-rule border-y border-rule">
             {[
               `Data engineering practice operating continuously since ${site.founded}`,
-              "Senior-only delivery — no bench, no substitution after award",
+              "Full AI services — advisory, building, data foundations, and ongoing support",
               "Evaluation-first AI builds: measurable pass rates, not demos",
               "Client retains all code, infrastructure, and documentation",
               "Systems deployed in the client's own cloud accounts and controls",
@@ -70,6 +70,10 @@ export default function CapabilityPage() {
             {[
               { k: "Email", v: site.email },
               { k: "Web", v: "gjh-inc.com" },
+              {
+                k: "Address",
+                v: `${site.address.street}, ${site.address.city}, ${site.address.region} ${site.address.postal}, ${site.address.country}`,
+              },
               { k: "Founded", v: site.founded },
             ].map((r) => (
               <div key={r.k} className="flex justify-between gap-4 py-3 text-sm">

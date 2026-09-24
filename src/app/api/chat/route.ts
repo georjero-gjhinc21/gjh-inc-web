@@ -32,7 +32,7 @@ const MAX_INPUT_CHARS = 4000;  // Per message, server-enforced
 
 const knowledge = () =>
   [
-    `COMPANY: ${site.legalName} (${site.name}). Founded ${site.founded}. Contact: ${site.email}.`,
+    `COMPANY: ${site.legalName} (${site.name}). Founded ${site.founded}. Contact: ${site.email}. Office: ${site.address.street}, ${site.address.city}, ${site.address.region} ${site.address.postal}, ${site.address.country}.`,
     `POSITIONING: ${site.description}`,
     "",
     "PRACTICES:",
@@ -44,7 +44,7 @@ const knowledge = () =>
     "PARTNERSHIPS:",
     ...partners.map((p) => `- ${p.name} (${p.domain}): ${p.why}`),
     "",
-    "ENGAGEMENT MODEL: Start with a short paid assessment of one workflow, usually under a month. Senior people deliver. The client owns all code, infrastructure, and documentation.",
+    "ENGAGEMENT MODEL: Start with a short paid assessment of one workflow, usually under a month. Full AI services across advisory, building, data foundations, and ongoing support. The client owns all code, infrastructure, and documentation.",
   ].join("\n");
 
 const SYSTEM = `You answer questions about ${site.legalName} on its website.
