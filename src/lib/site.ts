@@ -14,7 +14,7 @@ export const site = {
   email: "consult@gjh-inc.com", // canonical everywhere
   linkedin: "https://www.linkedin.com/company/gjhinc",
   founded: "2009",
-  tagline: "Data and AI services, from assessment to production.",
+  tagline: "Consulting for organizations putting AI to work.",
   description:
     "GJH Inc. helps teams find where AI genuinely helps, build the systems that deliver it, and keep the data underneath in good order. Consulting since 2009.",
   address: {
