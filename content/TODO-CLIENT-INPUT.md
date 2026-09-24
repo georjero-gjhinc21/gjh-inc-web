@@ -5,15 +5,15 @@ ships is traceable to something GJH has published or confirmed.
 
 ## Hard blockers
 
-**1. Positioning decision.** AI/data consultancy (what gjh-inc.com says today,
-what this repo builds) or federal contracting platform (what the PRD says)?
-See `docs/ROADMAP.md` for the recommendation and reasoning. One line of
-direction unblocks everything else.
+**1. Positioning decision — decided 2026-09-24.** Data and AI company with full AI
+services (advisory, building, data foundations, support) on gjh-inc.com. The
+federal practice lives on gjhconsulting.net and is cross-linked, not duplicated
+here. See `docs/ROADMAP.md` for the earlier reasoning.
 
 ## Needed, but the site ships without them
 
 **2. Team.** Names, roles, and two or three sentences each. `/about` has the
-slot. "Senior people do the work" is a stronger claim when the seniors are
+slot. Full AI services is a stronger claim when the people behind it are
 named.
 
 **3. Two real proof numbers.** `src/lib/site.ts` has `TBD` placeholders for
@@ -29,7 +29,7 @@ these as unconfirmed; publishing them anyway is a real exposure.
 **5. Federal identifiers.** UEI, CAGE, NAICS codes, and any contract vehicles.
 Same rule as above.
 
-**6. Partner confirmation.** Five partnerships are listed in
+**6. Partner confirmation.** Six partnerships are listed in
 `src/lib/partners.ts`, taken from the live site. Confirm each is current and
 that logo usage is permitted before any logo is added — partner marks are
 trademark use.

@@ -19,7 +19,7 @@ export default async function InsightsPage() {
         <p className="eyebrow">Insights</p>
         <h1 className="h1 mt-5 max-w-[16ch]">Notes from the work</h1>
         <p className="lede mt-7">
-          Written by the people doing the engagements. Specific enough to disagree with.
+          Written from real engagements. Specific enough to disagree with.
         </p>
         {topics.length > 1 && (
           <ul className="mt-8 flex flex-wrap gap-2">

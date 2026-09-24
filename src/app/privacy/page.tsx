@@ -60,7 +60,9 @@ export default function PrivacyPage() {
 
           <h2>Contact</h2>
           <p>
-            Questions about this policy go to <a href={`mailto:${site.email}`}>{site.email}</a>.
+            Questions about this policy go to <a href={`mailto:${site.email}`}>{site.email}</a>,
+            or by post to {site.address.street}, {site.address.city}, {site.address.region}{" "}
+            {site.address.postal}, {site.address.country}.
           </p>
         </div>
       </div>
