@@ -57,7 +57,8 @@ These are enforced mechanically by `npm run check:claims` and by
 | Founded 2009 | live gjh-inc.com | yes |
 | Anthropic, Google, AWS, Databricks, Snowflake partnerships | `partners.ts` | yes, named, no logos |
 | Four practices: advisory, building, data foundations, staying-with-it | `practices.ts` | yes |
-| Working style: paid short assessment of one workflow first; senior people do the work; client owns everything built | `practices.ts` | yes |
+| Working style: paid short assessment of one workflow first; full AI services across advisory, building, data foundations, and support; client owns everything built | `practices.ts` | yes |
+| Office: 28 Geary St, Suite 650 PMB 5481, San Francisco, CA 94108, United States | `site.ts` address | yes |
 | Engagements delivered, median time-to-first-system | `site.ts` shows `TBD` | **no — placeholders** |
 | Any certification: 8(a), HUBZone, SDVOSB, WOSB | undocumented | **no. Compliance exposure** |
 | UEI, CAGE, NAICS, contract vehicles | undocumented | **no** |

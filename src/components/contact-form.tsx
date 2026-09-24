@@ -44,7 +44,7 @@ export function ContactForm() {
       <div className="card">
         <p className="chip-ok !text-signal">Sent</p>
         <p className="mt-4 leading-relaxed">
-          We read every message ourselves and reply within two business days. If it is urgent, email{" "}
+          We read every message and reply within two business days. If it is urgent, email{" "}
           <a className="text-indigo underline underline-offset-2" href={`mailto:${site.email}`}>
             {site.email}
           </a>{" "}

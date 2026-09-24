@@ -134,7 +134,7 @@ export const practices: Practice[] = [
       "Scheduled evaluation runs with regression alerting",
       "Cost and latency monitoring with monthly written review",
       "Model and dependency upgrade testing before you adopt them",
-      "Named senior contact, not a ticket queue",
+      "Named contact, not a ticket queue",
       "Exit plan on request, with knowledge transfer",
     ],
     signals: [

@@ -56,8 +56,8 @@ export default async function HomePage() {
       <section className="band frame">
         <SectionHead
           eyebrow="What we do"
-          title="Four practices, one team"
-          lede="Senior people do the work. You will not be handed to a team you have not met."
+          title="Full AI services"
+          lede="Advisory, building, data foundations, and ongoing support. One company across the whole lifecycle."
           action={{ href: "/work", label: "All practices" }}
         />
         <ul className="grid gap-5 md:grid-cols-2">
@@ -90,8 +90,8 @@ export default async function HomePage() {
                 d: "A short assessment of one workflow, so you can judge the work before committing to more. Most engagements begin under a month.",
               },
               {
-                t: "Senior people do the work",
-                d: "The person in the first meeting is the person writing the code. No handoff to a bench you have not met.",
+                t: "Full AI services",
+                d: "Assessment, building, data foundations, and support after launch. One company for the whole job.",
               },
               {
                 t: "You own everything",

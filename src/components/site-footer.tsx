@@ -16,6 +16,13 @@ export function SiteFooter() {
             <p className="mt-4 font-mono text-label uppercase text-ink-muted">
               Consulting since {site.founded}
             </p>
+            <address className="mt-4 text-sm not-italic leading-relaxed text-ink-muted">
+              {site.address.street}
+              <br />
+              {site.address.city}, {site.address.region} {site.address.postal}
+              <br />
+              {site.address.country}
+            </address>
           </div>
 
           <FooterCol title="Practices">

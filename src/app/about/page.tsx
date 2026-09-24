@@ -51,8 +51,9 @@ export default function AboutPage() {
             {[
               { k: "Founded", v: site.founded },
               { k: "Focus", v: "AI systems and data engineering" },
-              { k: "Model", v: "Senior-only delivery" },
+              { k: "Services", v: "Full AI services" },
               { k: "IP", v: "Client owns everything" },
+              { k: "Office", v: `${site.address.city}, ${site.address.region}` },
               { k: "Contact", v: site.email },
             ].map((row) => (
               <div key={row.k} className="flex items-baseline justify-between gap-4 px-6 py-4">
