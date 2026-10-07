@@ -17,6 +17,10 @@
     "typecheck": "tsc --noEmit",
     "check:claims": "node scripts/check-claims.mjs",
     "check:claims:json": "node scripts/check-claims.mjs --json",
+    "x:test": "node scripts/x-read-test.mjs",
+    "x:check": "node scripts/x-oauth-test.mjs --check",
+    "x:oauth1a": "node scripts/x-oauth-test.mjs --oauth1a-live",
+    "x:oauth2:url": "node scripts/x-oauth-test.mjs --oauth2-url",
     "sync:agents": "cp CLAUDE.md AGENTS.md",
     "preflight": "npm run check:claims && npm run typecheck && npm run build"
   },
