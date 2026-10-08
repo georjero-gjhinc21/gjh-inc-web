@@ -25,17 +25,16 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? "Request failed");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setState("error");
+        setError(body.error ?? "Request failed");
+        return;
+      }
       setState("sent");
-    } catch {
-      // No API on this host — compose a mailto the visitor can send themselves.
-      const d = data as Record<string, string>;
-      const subject = encodeURIComponent(`Enquiry from your website — ${d.name ?? "Someone"}`);
-      const body = encodeURIComponent(
-        `Name: ${d.name ?? ""}\nEmail: ${d.email ?? ""}\nOrganization: ${d.organization ?? ""}\n\n${d.message ?? ""}`
-      );
-      window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
-      setState("sent");
+    } catch (err) {
+      setState("error");
+      setError(err instanceof Error ? err.message : "Request failed");
     }
   }
 

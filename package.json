@@ -17,6 +17,10 @@
     "typecheck": "tsc --noEmit",
     "check:claims": "node scripts/check-claims.mjs",
     "check:claims:json": "node scripts/check-claims.mjs --json",
+    "x:test": "node scripts/x-read-test.mjs",
+    "x:check": "node scripts/x-oauth-test.mjs --check",
+    "x:oauth1a": "node scripts/x-oauth-test.mjs --oauth1a-live",
+    "x:oauth2:url": "node scripts/x-oauth-test.mjs --oauth2-url",
     "sync:agents": "cp CLAUDE.md AGENTS.md",
     "preflight": "npm run check:claims && npm run typecheck && npm run build"
   },
@@ -32,6 +36,7 @@
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
     "@eslint/eslintrc": "^3.3.6",
+    "@playwright/test": "^1.64.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
