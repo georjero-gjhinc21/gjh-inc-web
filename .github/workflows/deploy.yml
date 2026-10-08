@@ -46,11 +46,12 @@ jobs:
           import os, time, urllib.request, html
           base = os.environ['SITE_URL'].rstrip('/')
           checks = {
-              '/': 'Configurable-product order intake with human confirmation',
-              '/work': 'Configurable-product order intake with human confirmation',
+              '/': 'Meeting intelligence with accountable follow-through',
+              '/work': 'Meeting intelligence with accountable follow-through',
               '/sectors': 'Structured product requests with human confirmation',
               '/work/structured-order-intake': 'Configurable-product order intake with human confirmation',
-              '/sitemap.xml': '/work/structured-order-intake',
+              '/work/meeting-intelligence': 'Meeting intelligence with accountable follow-through',
+              '/sitemap.xml': '/work/meeting-intelligence',
           }
           pending = dict(checks)
           for attempt in range(12):
