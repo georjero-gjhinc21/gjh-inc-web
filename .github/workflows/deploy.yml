@@ -48,7 +48,7 @@ jobs:
           checks = {
               '/': 'Meeting intelligence with accountable follow-through',
               '/work': 'Meeting intelligence with accountable follow-through',
-              '/sectors': 'Structured product requests with human confirmation',
+              '/sectors': 'Professional services and enterprise operations',
               '/work/structured-order-intake': 'Configurable-product order intake with human confirmation',
               '/work/meeting-intelligence': 'Meeting intelligence with accountable follow-through',
               '/sitemap.xml': '/work/meeting-intelligence',

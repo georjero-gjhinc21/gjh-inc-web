@@ -20,13 +20,20 @@ export default function IndustriesPage() {
       <p className="mt-4 max-w-measure leading-relaxed text-muted">Verification records document test submissions and notification receipt. This example describes implemented functionality, not measured commercial improvements or final client acceptance.</p>
       <Link href="/work/structured-order-intake" className="btn-ghost mt-6">Explore the order-intake example</Link>
     </section>
+    <section className="frame band border-t border-rule" aria-labelledby="professional-services-heading">
+      <p className="eyebrow">Professional services and enterprise operations</p>
+      <h2 id="professional-services-heading" className="h3 mt-5">Meeting intelligence with accountable follow-through</h2>
+      <p className="mt-4 max-w-measure leading-relaxed text-muted">A meeting-intelligence workflow processes transcripts into reviewable decisions, commitments, risks, and follow-ups, with role-based classification and supporting context kept visible for human judgment.</p>
+      <p className="mt-4 max-w-measure leading-relaxed text-muted">Optional connected-system handoff can move an approved action into an operating workflow. The pattern is useful across consulting, legal, financial, healthcare administration, construction, and other meeting-heavy organizations, while this example avoids customer identities and private meeting content.</p>
+      <Link href="/work/meeting-intelligence" className="btn-ghost mt-6">Explore the meeting-intelligence example</Link>
+    </section>
     {published.length > 0 && <section className="frame border-t border-rule py-12">
       <h2 className="h3">More published industry work</h2>
       <ul className="mt-6 grid gap-5 md:grid-cols-2">{published.map((sector) => <li key={sector.slug}><Link href={`/sectors/${sector.slug}`} className="card-link block">{sector.name}</Link></li>)}</ul>
     </section>}
     <section className="frame border-t border-rule py-12">
       <h2 className="h3">Confidentiality by design</h2>
-      <p className="mt-4 max-w-measure leading-relaxed text-muted">This example omits customer identities, locations, product brands, and identifying operational details. It describes the workflow without publishing private project records.</p>
+      <p className="mt-4 max-w-measure leading-relaxed text-muted">These examples omit customer identities, locations, product brands, meeting contents, and identifying operational details. They describe the workflows without publishing private project records.</p>
     </section>
     <CalloutCTA title="Discuss an operational workflow" body="Describe the request, the systems it touches, and where a person needs to make the decision." />
   </>;
