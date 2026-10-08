@@ -5,86 +5,42 @@ import { publishedSectors } from "@/lib/sectors";
 
 export const metadata: Metadata = {
   title: "Industries",
-  description:
-    "Where the constraints make the work different — financial services, energy, manufacturing, healthcare, field services, construction, automotive, retail, ecommerce, real estate, education, travel, and transportation.",
-  alternates: { canonical: "/sectors" },
+  description: "Industry workflows explained through documented work, without disclosing customer identities or locations.",
 };
 
 export default function IndustriesPage() {
   const published = publishedSectors();
-
   return (
     <>
       <section className="frame border-b border-rule py-20 lg:py-24">
-        <p className="eyebrow">Industries</p>
-        <h1 className="h1 mt-5 max-w-[20ch]">
-          The work looks different in a bank than it does at a builder.
-        </h1>
-        <p className="lede mt-7 max-w-[60ch]">
-          Industries where GJH has delivered work we can name. Each sector appears here
-          only after completing client-approved work in it — the constraint that keeps
-          this list honest.
-        </p>
+        <p className="font-mono text-label uppercase text-muted">Industries</p>
+        <h1 className="h1 mt-5 max-w-[20ch]">Industry workflows, explained through the work.</h1>
+        <p className="lede mt-7 max-w-[60ch]">Explore how information is captured, how requests move between systems, and where people remain responsible for decisions. Examples focus on documented functionality rather than customer identities or unverified outcomes.</p>
       </section>
-
-      <div className="border-t border-rule bg-paper">
-        {published.length === 0 ? (
-          <div className="frame py-20">
-            <div className="max-w-[60ch]">
-              <h2 className="h3">Waiting on approval</h2>
-              <p className="mt-4 text-muted leading-relaxed">
-                GJH has delivery history across financial services, energy, manufacturing,
-                healthcare, and nine other sectors. None appear here yet because the firm
-                does not publish industry claims without named, client-approved work to back
-                them.
-              </p>
-              <p className="mt-4 text-muted leading-relaxed">
-                Getting one case study approved will unlock the first sector. That is the
-                blocker — a human decision, not a content gap.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <ul className="frame divide-y divide-rule">
-            {published.map((s, i) => (
-            <li key={s.slug}>
-              <Link
-                href={`/sectors/${s.slug}`}
-                className="group grid gap-6 px-2 py-10 sm:grid-cols-[3.5rem_1fr_auto] sm:gap-8 sm:px-0"
-              >
-                <span className="font-mono text-label uppercase text-muted">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h2 className="h3 transition-colors group-hover:text-indigo">
-                    {s.name}
-                  </h2>
-                  <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">{s.short}</p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {s.outcomes.slice(0, 2).map((o) => (
-                      <li
-                        key={o}
-                        className="rounded-chip border border-rule px-2.5 py-1 font-mono text-[11px] text-muted"
-                      >
-                        {o}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <span className="hidden items-center self-center text-sm text-indigo sm:flex">
-                  Read more →
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        )}
-      </div>
-
-      <CalloutCTA
-        title="Industry not listed?"
-        body="Name the industry and the problem. If it is a real deployment problem, it is probably on our list — we just have not written it up yet."
-      />
+      <section className="frame py-20" aria-labelledby="manufacturing-heading">
+        <p className="font-mono text-label uppercase text-muted">Manufacturing and order operations</p>
+        <h2 id="manufacturing-heading" className="h3 mt-5">Structured product requests with human confirmation</h2>
+        <p className="mt-4 max-w-[60ch] leading-relaxed text-muted">A configurable-product order-request workflow captures selected options and acknowledgment fields, then sends a structured notification for review. Submitting a request does not automatically confirm an order.</p>
+        <p className="mt-4 max-w-[60ch] leading-relaxed text-muted">Verification records document test submissions and notification receipt. This example describes implemented functionality, not measured commercial improvements or final client acceptance.</p>
+        <Link href="/work/structured-order-intake" className="mt-6 inline-block underline">Explore the order-intake example</Link>
+      </section>
+      {published.length > 0 && (
+        <section className="frame border-t border-rule py-12" aria-labelledby="published-sectors-heading">
+          <h2 id="published-sectors-heading" className="h3">More published industry work</h2>
+          <ul className="mt-6 grid gap-5 md:grid-cols-2">
+            {published.map((sector) => (
+              <li key={sector.slug}>
+                <Link href={`/sectors/${sector.slug}`} className="card-link block">{sector.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      <section className="frame border-t border-rule py-12">
+        <h2 className="h3">Confidentiality by design</h2>
+        <p className="mt-4 max-w-[60ch] leading-relaxed text-muted">This example omits customer identities, locations, product brands, and identifying operational details. It describes the workflow without publishing private project records.</p>
+      </section>
+      <CalloutCTA />
     </>
   );
 }
