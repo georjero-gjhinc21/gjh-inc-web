@@ -46,12 +46,32 @@ jobs:
           import os, time, urllib.request, html
           base = os.environ['SITE_URL'].rstrip('/')
           checks = {
-              '/': 'Meeting intelligence with accountable follow-through',
-              '/work': 'Meeting intelligence with accountable follow-through',
-              '/sectors': 'Professional services and enterprise operations',
-              '/work/structured-order-intake': 'Configurable-product order intake with human confirmation',
-              '/work/meeting-intelligence': 'Meeting intelligence with accountable follow-through',
-              '/sitemap.xml': '/work/meeting-intelligence',
+              '/': [
+                  'Meeting intelligence with accountable follow-through',
+                  'API cost control for an AI-enabled platform',
+              ],
+              '/work': [
+                  'Meeting intelligence with accountable follow-through',
+                  'API cost control for an AI-enabled platform',
+                  'Ongoing project',
+              ],
+              '/sectors': [
+                  'Professional services and enterprise operations',
+                  'Technology platforms and digital products',
+              ],
+              '/work/structured-order-intake': [
+                  'Configurable-product order intake with human confirmation',
+              ],
+              '/work/meeting-intelligence': [
+                  'Meeting intelligence with accountable follow-through',
+              ],
+              '/work/api-cost-control': [
+                  'API cost control for an AI-enabled platform',
+              ],
+              '/sitemap.xml': [
+                  '/work/meeting-intelligence',
+                  '/work/api-cost-control',
+              ],
           }
           pending = dict(checks)
           for attempt in range(12):
@@ -61,8 +81,9 @@ jobs:
                       request = urllib.request.Request(url, headers={'Cache-Control': 'no-cache', 'User-Agent': 'GJH-deployment-verification'})
                       with urllib.request.urlopen(request, timeout=20) as response:
                           body = html.unescape(response.read().decode('utf-8'))
-                      if expected not in body:
-                          raise ValueError('Expected updated content missing')
+                      missing = [item for item in expected if item not in body]
+                      if missing:
+                          raise ValueError('Expected updated content missing: ' + ', '.join(missing))
                       if path in ('/', '/sectors') and ('Waiting on approval' in body or 'Named case studies are pending client approval' in body):
                           raise ValueError('Obsolete approval placeholder remains')
                       del pending[path]

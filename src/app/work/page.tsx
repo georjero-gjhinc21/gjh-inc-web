@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CalloutCTA } from "@/components/ui";
 import { practices } from "@/lib/practices";
 
-export const metadata: Metadata = { title: "Work", description: "Advisory, building, data foundations, ongoing support, and anonymized implementation examples for order intake and meeting intelligence.", alternates: { canonical: "/work" } };
+export const metadata: Metadata = { title: "Work", description: "Advisory, building, data foundations, ongoing support, and anonymized examples for order intake, meeting intelligence, and an ongoing API cost-control project.", alternates: { canonical: "/work" } };
 
 export default function WorkPage() {
   return <>
@@ -26,6 +26,12 @@ export default function WorkPage() {
           <p className="eyebrow">Meeting operations and follow-through</p>
           <h3 className="h3 mt-3">Meeting intelligence with accountable follow-through</h3>
           <p className="mt-3 max-w-measure leading-relaxed text-muted">Transcript ingestion, structured action extraction, executive classification, and optional task handoff. The example describes implemented behavior without exposing participants, organizations, or meeting content.</p>
+          <span className="mt-6 block text-sm text-indigo">Explore the work →</span>
+        </Link>
+        <Link href="/work/api-cost-control" className="card-link block">
+          <p className="eyebrow">Ongoing project</p>
+          <h3 className="h3 mt-3">API cost control for an AI-enabled platform</h3>
+          <p className="mt-3 max-w-measure leading-relaxed text-muted">Requirements and architecture for metering, spend limits, evaluated model routing, customer-owned credentials, and partner-agency delivery under one change-control process. No customer, location, or savings claim is published.</p>
           <span className="mt-6 block text-sm text-indigo">Explore the work →</span>
         </Link>
       </div>

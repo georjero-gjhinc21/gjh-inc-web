@@ -27,6 +27,13 @@ export default function IndustriesPage() {
       <p className="mt-4 max-w-measure leading-relaxed text-muted">Optional connected-system handoff can move an approved action into an operating workflow. The pattern is useful across consulting, legal, financial, healthcare administration, construction, and other meeting-heavy organizations, while this example avoids customer identities and private meeting content.</p>
       <Link href="/work/meeting-intelligence" className="btn-ghost mt-6">Explore the meeting-intelligence example</Link>
     </section>
+    <section className="frame band border-t border-rule" aria-labelledby="technology-platforms-heading">
+      <p className="eyebrow">Technology platforms and digital products</p>
+      <h2 id="technology-platforms-heading" className="h3 mt-5">API cost control for an AI-enabled platform</h2>
+      <p className="mt-4 max-w-measure leading-relaxed text-muted">An ongoing requirements and architecture engagement defines how a digital product platform measures third-party AI API usage, applies request and spend limits before provider calls, and keeps credentials in the customer&apos;s own accounts.</p>
+      <p className="mt-4 max-w-measure leading-relaxed text-muted">Partner agencies can be coordinated for specialized delivery, under one architecture, security boundary, and change-control process. Custom adapters stay fitted to the platform&apos;s workflows. This example names neither the customer nor a location, and it claims no savings figure or production outcome.</p>
+      <Link href="/work/api-cost-control" className="btn-ghost mt-6">Explore the API cost-control project</Link>
+    </section>
     {published.length > 0 && <section className="frame border-t border-rule py-12">
       <h2 className="h3">More published industry work</h2>
       <ul className="mt-6 grid gap-5 md:grid-cols-2">{published.map((sector) => <li key={sector.slug}><Link href={`/sectors/${sector.slug}`} className="card-link block">{sector.name}</Link></li>)}</ul>
