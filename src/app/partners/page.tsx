@@ -5,7 +5,7 @@ import { partners } from "@/lib/partners";
 export const metadata: Metadata = {
   title: "Partners",
   description:
-    "GJH Inc. works with Anthropic, OpenAI, Databricks, Snowflake, AWS, Google, Zoom, and Omnissa — and builds in the client's own accounts.",
+    "GJH Inc. works with Anthropic, OpenAI, Databricks, Snowflake, AWS, Google, Zoom, Omnissa, and Microsoft — and builds in the client's own accounts.",
   alternates: { canonical: "/partners" },
 };
 

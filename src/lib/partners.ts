@@ -76,4 +76,11 @@ export const partners: Partner[] = [
     why: "We help teams plan secure digital workspace and endpoint-management programmes, connecting platform delivery with the data and automation work around it.",
     verified: true,
   },
+  {
+    slug: "microsoft",
+    name: "Microsoft",
+    domain: "Cloud & business applications",
+    why: "We help teams connect Microsoft cloud, productivity, data, and automation services to governed AI and operational workflows in their own environment.",
+    verified: true,
+  },
 ];
