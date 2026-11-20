@@ -6,6 +6,7 @@ import { partners } from "@/lib/partners";
 import { publishedSectors } from "@/lib/sectors";
 import { getCollection, formatDate } from "@/lib/content";
 import { site } from "@/lib/site";
+import { projectUpdates } from "@/lib/updates";
 
 export default async function HomePage() {
   const insights = (await getCollection("insights")).slice(0, 3);
@@ -43,8 +44,18 @@ export default async function HomePage() {
       </ul>
     </section>
     <section className="band frame border-t border-rule">
+      <SectionHead eyebrow="Project updates" title="Current delivery work, anonymized" lede="System boundaries and review artifacts, without customer identities or unverified outcomes." action={{ href: "/updates", label: "All updates" }} />
+      <ul className="grid gap-5 lg:grid-cols-3">
+        {projectUpdates.map((update) => <li key={update.slug} className="card flex h-full flex-col">
+          <div className="flex flex-wrap items-center gap-2"><span className="rounded-chip bg-signal/[0.12] px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-ink">{update.status}</span><span className="eyebrow">{update.area}</span></div>
+          <h3 className="h3 mt-5">{update.title}</h3>
+          <p className="mt-3 leading-relaxed text-muted">{update.summary}</p>
+        </li>)}
+      </ul>
+    </section>
+    <section className="band frame border-t border-rule">
       <SectionHead eyebrow="Partnerships" title="Platforms we build on" lede="What matters is what we do with them." action={{ href: "/partners", label: "Details" }} />
-      <PartnerWall items={partners.map(({ name, domain, why }) => ({ name, domain, why }))} />
+      <PartnerWall items={partners.map(({ name, domain, tier, why }) => ({ name, domain, tier, why }))} />
     </section>
     {insights.length > 0 && <section className="band frame border-t border-rule">
       <SectionHead eyebrow="Insights" title="Notes from the work" action={{ href: "/insights", label: "All insights" }} />

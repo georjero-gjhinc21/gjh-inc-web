@@ -38,14 +38,17 @@ export function SectionHead({
 export function PartnerWall({
   items,
 }: {
-  items: { name: string; domain: string; why?: string }[];
+  items: { name: string; domain: string; tier?: string; why?: string }[];
 }) {
   return (
     <ul className="grid gap-px overflow-hidden rounded-card border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-3">
       {items.map((p) => (
         <li key={p.name} className="bg-paper p-6">
           <p className="font-mono text-label uppercase text-muted">{p.domain}</p>
-          <p className="mt-2 font-display text-xl">{p.name}</p>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <p className="font-display text-xl">{p.name}</p>
+            {p.tier && <span className="rounded-chip border border-indigo/25 bg-indigo/[0.06] px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-indigo">{p.tier}</span>}
+          </div>
           {p.why && <p className="mt-3 text-sm leading-relaxed text-muted">{p.why}</p>}
         </li>
       ))}

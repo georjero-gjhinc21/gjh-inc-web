@@ -30,6 +30,7 @@ export const nav = [
   { href: "/work", label: "Work" },
   { href: "/sectors", label: "Industries" },
   { href: "/insights", label: "Insights" },
+  { href: "/updates", label: "Updates" },
   { href: "/partners", label: "Partners" },
   { href: "/about", label: "About" },
 ] as const;
@@ -37,7 +38,7 @@ export const nav = [
 /** Proof numbers. Each needs a source before it ships. */
 export const proof = [
   { value: "2009", label: "Consulting since", note: "verified — stated on gjh-inc.com" },
-  { value: "6", label: "Cloud & AI partnerships", note: "verified — Anthropic, OpenAI, Google, AWS, Databricks, Snowflake" },
+  { value: "8", label: "Technology partnerships", note: "verified — Anthropic, OpenAI, Google, AWS, Databricks, Snowflake, Zoom, Omnissa" },
   { value: "TBD", label: "Engagements delivered", note: "NEEDS GJH INPUT" },
   { value: "TBD", label: "Median time to first working system", note: "NEEDS GJH INPUT" },
 ] as const;

@@ -12,6 +12,7 @@ export type Partner = {
   slug: string;
   name: string;
   domain: string; // where the work lands
+  tier?: string; // publish only when confirmed by the partner programme
   why: string; // what GJH actually does with it
   verified: boolean;
 };
@@ -57,6 +58,22 @@ export const partners: Partner[] = [
     name: "Google",
     domain: "Cloud & workspace",
     why: "Cloud infrastructure and workspace integration for teams whose day runs inside Google.",
+    verified: true,
+  },
+  {
+    slug: "zoom",
+    name: "Zoom",
+    domain: "Communications & customer experience",
+    tier: "Silver partner",
+    why: "We help teams shape collaboration, phone, and contact-centre deployments, with access to partner support and specialist delivery resources when a project needs them.",
+    verified: true,
+  },
+  {
+    slug: "omnissa",
+    name: "Omnissa",
+    domain: "Digital workspace",
+    tier: "Silver partner",
+    why: "We help teams plan secure digital workspace and endpoint-management programmes, connecting platform delivery with the data and automation work around it.",
     verified: true,
   },
 ];
